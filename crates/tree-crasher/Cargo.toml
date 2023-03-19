@@ -1,0 +1,23 @@
+[package]
+name = "tree-crasher"
+version = "0.0.0"
+edition = "2021"
+description = "Easy-to-use grammar-based black-box fuzzer"
+keywords = ["black-box", "fuzzer", "grammar-based"]
+authors = ["Langston Barrett <langston.barrett@gmail.com>"]
+license = "MIT"
+readme = "../../README.md"
+homepage = "https://github.com/langston-barrett/tree-crasher"
+repository = "https://github.com/langston-barrett/tree-crasher"
+
+[dependencies]
+anyhow = { version = "1", optional = false }
+clap-verbosity-flag = { version = "2", optional = false }
+clap = { version = "4", features = ["derive"], optional = false }
+nu-ansi-term = { version = "0.46", optional = false }
+num_cpus = { version = "1", optional = false }
+rand = "0.8"
+regex = "1"
+treereduce = "0.2"
+tree-sitter = "0.20"
+tree-splicer = "0.3"

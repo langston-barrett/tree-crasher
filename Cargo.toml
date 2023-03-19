@@ -1,0 +1,12 @@
+[workspace] 
+members = [
+    "crates/tree-crasher",
+    "crates/tree-crasher-javascript",
+    "crates/tree-crasher-regex",
+    "crates/tree-crasher-rust",
+    "crates/tree-crasher-sql",
+]
+
+# https://nnethercote.github.io/perf-book/build-configuration.html
+[profile.release]
+lto = true
