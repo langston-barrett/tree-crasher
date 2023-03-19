@@ -51,7 +51,7 @@ jobs:
       run: |
         # tree-crasher-{regex,sql} currently aren't suitable for upload to
         # crates.io because they have git dependencies
-        for pkg in tree-crasher{,-javascript,-regex,-rust}; do
+        for pkg in tree-crasher{,-javascript,-rust}; do
           if [[ ${PUSH} == true ]]; then
             cargo publish --token ${CRATES_IO_TOKEN} -p "${pkg}"
           else
