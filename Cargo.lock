@@ -515,7 +515,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -531,7 +531,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-javascript"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -540,7 +540,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-regex"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -549,7 +549,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-rust"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -558,7 +558,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-sql"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
