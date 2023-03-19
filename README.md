@@ -117,8 +117,11 @@ tree-crasher-sql \
 
 ## Bugs found
 
-tree-crasher is mostly a thin wrapper around tree-splicer; see
-[the tree-splicer README](https://github.com/langston-barrett/tree-splicer).
+tree-crasher uses [tree-splicer][tree-splicer] to generate test cases, see the
+list of bugs found in that project's README.
+
+If you find a bug with tree-crasher, please let me know! One great way to do so
+would be to submit a PR to tree-splicer to add it to the README.
 
 ## Usage
 
