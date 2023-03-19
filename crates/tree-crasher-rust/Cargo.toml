@@ -1,9 +1,9 @@
 [package]
 name = "tree-crasher-rust"
-version = "0.0.0"
+version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 anyhow = "1"
-tree-crasher = { version = "0.0.0", path = "../tree-crasher" }
+tree-crasher = { version = "0.1.0", path = "../tree-crasher" }
 tree-sitter-rust = "0.20"

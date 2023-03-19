@@ -1,6 +1,6 @@
 [package]
 name = "tree-crasher"
-version = "0.0.0"
+version = "0.1.0"
 edition = "2021"
 description = "Easy-to-use grammar-based black-box fuzzer"
 keywords = ["black-box", "fuzzer", "grammar-based"]
