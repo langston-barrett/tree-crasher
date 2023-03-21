@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use std::fs;
 use std::os::unix::process::ExitStatusExt;
 use std::path::PathBuf;
-use std::sync::Arc;
 use std::time::Duration;
 
 use anyhow::{Context, Result};
@@ -172,8 +171,8 @@ const BATCH: usize = 100_000; // not all materialized at once
 fn job(
     language: Language,
     // HACK: there should be another crate that deals with this...
-    node_types1: treereduce::NodeTypes,
-    node_types2: tree_splicer::node_types::NodeTypes,
+    node_types1: &treereduce::NodeTypes,
+    node_types2: &tree_splicer::node_types::NodeTypes,
     args: &Args,
     files: &HashMap<String, (Vec<u8>, Tree)>,
     chk: CmdCheck,
@@ -258,7 +257,7 @@ pub fn main(language: tree_sitter::Language, node_types_json_str: &'static str) 
             files.insert(String::from(path.to_string_lossy()), (s.into_bytes(), tree));
         }
     }
-    let chk0 = check(
+    let chk = check(
         args.debug,
         Duration::from_millis(args.timeout),
         args.check.clone(),
@@ -268,30 +267,27 @@ pub fn main(language: tree_sitter::Language, node_types_json_str: &'static str) 
         args.uninteresting_stdout.clone(),
         args.uninteresting_stderr.clone(),
     )?;
-    let node_types01 = treereduce::NodeTypes::new(node_types_json_str).unwrap();
-    let node_types02 = tree_splicer::node_types::NodeTypes::new(node_types_json_str).unwrap();
-
-    let afiles0 = Arc::new(files); // share 'cause it's big
+    let node_types1 = treereduce::NodeTypes::new(node_types_json_str).unwrap();
+    let node_types2 = tree_splicer::node_types::NodeTypes::new(node_types_json_str).unwrap();
 
     if args.debug {
         eprintln!("Spawning threads...");
     }
     let jobs = if args.debug { 1 } else { args.jobs };
-    let mut handles = Vec::with_capacity(jobs);
-    for _ in 0..jobs {
-        let afiles = afiles0.clone();
-        let args0 = args.clone();
-        let chk = chk0.clone();
-        let node_types1 = node_types01.clone();
-        let node_types2 = node_types02.clone();
-        handles.push(std::thread::spawn(move || {
-            job(language, node_types1, node_types2, &args0, &afiles, chk)
-        }));
-    }
-    for h in handles {
-        h.join()
-            .expect("Problem when waiting for thread that should never finish...");
-    }
+    std::thread::scope(|s| {
+        for _ in 0..jobs {
+            s.spawn(|| {
+                job(
+                    language,
+                    &node_types1,
+                    &node_types2,
+                    &args,
+                    &files,
+                    chk.clone(),
+                )
+            });
+        }
+    });
 
     Ok(())
 }
