@@ -1,0 +1,16 @@
+[package]
+name = "tree-crasher-ruby"
+version = "0.1.2"
+edition = "2021"
+description = "Easy-to-use grammar-based black-box fuzzer"
+keywords = ["black-box", "fuzzer", "grammar-based"]
+authors = ["Langston Barrett <langston.barrett@gmail.com>"]
+license = "MIT"
+readme = "../../README.md"
+homepage = "https://github.com/langston-barrett/tree-crasher"
+repository = "https://github.com/langston-barrett/tree-crasher"
+
+[dependencies]
+anyhow = "1"
+tree-crasher = { version = "0.1.2", path = "../tree-crasher" }
+tree-sitter-ruby = "0.20"

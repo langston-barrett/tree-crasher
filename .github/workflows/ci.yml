@@ -36,10 +36,13 @@ jobs:
     - uses: Swatinem/rust-cache@ce325b60658c1b38465c06cc965b79baf32c1e72
     - run: |
         cargo build \
+          --bin ${NAME}-c \
+          --bin ${NAME}-css \
           --bin ${NAME}-javascript \
           --bin ${NAME}-regex \
           --bin ${NAME}-rust \
           --bin ${NAME}-sql \
+          --bin ${NAME}-typescript \
           --locked \
           --release \
           --target=x86_64-unknown-linux-musl
