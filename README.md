@@ -99,11 +99,6 @@ Obtain a collection of SQL files (for example, using
 tree-crasher-sql --interesting-stderr "INTERNAL Error" corpus/ -- duckdb
 ```
 
-Here's how to fuzz ClickHouse:
-```sh
-tree-crasher-sql corpus/ -- clickhouse local
-```
-
 Sometimes, you keep running into the same bug and would like to stop reporting
 it. For that, you can use `--uninteresting-stderr`:
 ```sh
@@ -115,6 +110,8 @@ tree-crasher-sql \
   duckdb
 ```
 
+More examples are listed at the end of the README.
+
 ## Bugs found
 
 tree-crasher uses [tree-splicer][tree-splicer] to generate test cases, see the
@@ -122,6 +119,23 @@ list of bugs found in that project's README.
 
 If you find a bug with tree-crasher, please let me know! One great way to do so
 would be to submit a PR to tree-splicer to add it to the README.
+
+## Supported languages
+
+tree-crasher currently ships pre-built executables for the following languages:
+
+- [C](./crates/tree-crasher-c)
+- [CSS](./crates/tree-crasher-css)
+- [HTML](./crates/tree-crasher-html)
+- [JavaScript](./crates/tree-crasher-javascript)
+- [Regex](./crates/tree-crasher-regex)
+- [Rust](./crates/tree-crasher-rust)
+- [SQL](./crates/tree-crasher-sql)
+- [TypeScript](./crates/tree-crasher-typescript)
+
+Additionally, a [Ruby](./crates/tree-crasher-ruby) fuzzer can be built from
+source. Languages are very easy to add, so file an issue or a PR if you want
+a new one!
 
 ## Usage
 
@@ -178,6 +192,18 @@ cargo build --release
 ```
 
 You can find binaries in `target/release`. Run tests with `cargo test`.
+
+## Even more examples
+
+[`deno fmt`](https://deno.land/manual@v1.31.3/tools/formatter):
+```sh
+tree-crasher-javascript corpus/ -- deno fmt @@.js
+```
+
+[ClickHouse](https://github.com/ClickHouse/ClickHouse):
+```sh
+tree-crasher-sql corpus/ -- clickhouse local
+```
 
 [cargo]: https://doc.rust-lang.org/cargo/
 [crates-io]: https://crates.io/
