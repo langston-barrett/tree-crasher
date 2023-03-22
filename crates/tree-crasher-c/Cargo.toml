@@ -1,6 +1,6 @@
 [package]
 name = "tree-crasher-c"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 description = "Easy-to-use grammar-based black-box fuzzer"
 keywords = ["black-box", "fuzzer", "grammar-based"]
@@ -12,5 +12,5 @@ repository = "https://github.com/langston-barrett/tree-crasher"
 
 [dependencies]
 anyhow = "1"
-tree-crasher = { version = "0.1.2", path = "../tree-crasher" }
+tree-crasher = { version = "0.2.0", path = "../tree-crasher" }
 tree-sitter-c = "0.20"

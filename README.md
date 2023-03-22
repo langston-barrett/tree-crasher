@@ -126,16 +126,19 @@ tree-crasher currently ships pre-built executables for the following languages:
 
 - [C](./crates/tree-crasher-c)
 - [CSS](./crates/tree-crasher-css)
-- [HTML](./crates/tree-crasher-html)
 - [JavaScript](./crates/tree-crasher-javascript)
 - [Regex](./crates/tree-crasher-regex)
 - [Rust](./crates/tree-crasher-rust)
 - [SQL](./crates/tree-crasher-sql)
 - [TypeScript](./crates/tree-crasher-typescript)
 
-Additionally, a [Ruby](./crates/tree-crasher-ruby) fuzzer can be built from
-source. Languages are very easy to add, so file an issue or a PR if you want
-a new one!
+Additionally, the following fuzzers can be built from source or installed via
+crates.io:
+
+- [HTML](./crates/tree-crasher-html)
+- [Ruby](./crates/tree-crasher-ruby)
+
+Languages are very easy to add, so file an issue or a PR if you want a new one!
 
 ## Usage
 
