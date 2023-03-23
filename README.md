@@ -198,6 +198,12 @@ You can find binaries in `target/release`. Run tests with `cargo test`.
 
 ## Even more examples
 
+Clang (frontend) (see also [this script](./scripts/corpora/c.sh)):
+
+```sh
+tree-crasher-c corpus/ --interesting-stderr "(?m)^PLEASE " -- clang -c -O0 -o /dev/null -emit-llvm -Xclang -disable-llvm-passes @@.c
+```
+
 [`deno fmt`](https://deno.land/manual@v1.31.3/tools/formatter):
 ```sh
 tree-crasher-javascript corpus/ -- deno fmt @@.js
