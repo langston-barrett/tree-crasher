@@ -40,7 +40,7 @@ mdbook build
 - Update the version numbers in `./crates/**/Cargo.toml`
 
   ```sh
-  find crates/ -type f -name "*.toml" -0 | \
+  find crates/ -type f -name "*.toml" -print0 | \
     xargs -0 sed -E -i 's/^version = "U.V.W"$/version = "X.Y.Z"/'
   ```
 
