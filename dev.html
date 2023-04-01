@@ -176,7 +176,7 @@ mdbook build
 </li>
 <li>
 <p>Update the version numbers in <code>./crates/**/Cargo.toml</code></p>
-<pre><code class="language-sh">find crates/ -type f -name &quot;*.toml&quot; -0 | \
+<pre><code class="language-sh">find crates/ -type f -name &quot;*.toml&quot; -print0 | \
   xargs -0 sed -E -i 's/^version = &quot;U.V.W&quot;$/version = &quot;X.Y.Z&quot;/'
 </code></pre>
 </li>
