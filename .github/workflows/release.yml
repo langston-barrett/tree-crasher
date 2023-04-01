@@ -123,8 +123,8 @@ jobs:
           ${{ env.NAME }}-javascript_${{ matrix.target }},
           ${{ env.NAME }}-regex_${{ matrix.target }},
           ${{ env.NAME }}-rust_${{ matrix.target }},
-          ${{ env.NAME }}-typescript_${{ matrix.target }}
-          ${{ env.NAME }}-sql_${{ matrix.target }},
+          ${{ env.NAME }}-typescript_${{ matrix.target }},
+          ${{ env.NAME }}-sql_${{ matrix.target }}
         body: "See [CHANGELOG.md](https://github.com/langston-barrett/${{ env.NAME }}/blob/main/CHANGELOG.md)."
         draft: true
         token: ${{ secrets.GITHUB_TOKEN }}

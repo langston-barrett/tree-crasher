@@ -2,6 +2,10 @@
 
 <!-- https://keepachangelog.com/en/1.0.0/ -->
 
+## [0.2.2] - 2023-04-01
+
+- Releases now include executables for OSX
+
 ## [0.2.1] - 2023-04-01
 
 - Bump `tree-sitter-edit` to v0.1.2
@@ -28,3 +32,4 @@ Initial release!
 [0.1.2]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.1.2
 [0.2.0]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.0
 [0.2.1]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.1
+[0.2.2]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.2
