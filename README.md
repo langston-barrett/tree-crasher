@@ -19,6 +19,8 @@ with an incomplete grammar.
 tree-crasher uses [treereduce][treereduce] to automatically minimize generated
 test-cases.
 
+For more information, see [the documentation][doc].
+
 ## Examples
 
 When reading these examples, keep in mind that fuzzing can cause unpredictable
@@ -77,40 +79,9 @@ tree-crasher-rust \
 (The regex syntax is that of the
 [regex crate](https://docs.rs/regex/latest/regex/).)
 
-Here's how to limit the amount of memory taken by tree-crasher and rustc using
-`systemd-run`, and drop network access using `unshare`:
+### More examples
 
-```sh
-systemd-run --scope -p MemoryMax=16G -p MemorySwapMax=0B --user \
-  unshare -Umn \
-  tree-crasher-rust \
-    --interesting-stderr "(?m)^error: internal compiler error:" \
-    corpus \
-    -- \
-    rustc +nightly --crate-type=lib --emit=mir -Zmir-opt-level=4 @@.rs
-```
-
-### SQL databases
-
-Obtain a collection of SQL files (for example, using
-[this script](./scripts/corpora/sql.sh)). Then here's how to fuzz DuckDB:
-
-```sh
-tree-crasher-sql --interesting-stderr "INTERNAL Error" corpus/ -- duckdb
-```
-
-Sometimes, you keep running into the same bug and would like to stop reporting
-it. For that, you can use `--uninteresting-stderr`:
-```sh
-tree-crasher-sql \
-  --interesting-stderr "INTERNAL Error" \
-  --uninteresting-stderr "INTERNAL Error.+HyperLogLog::ComputeHashes" \
-  corpus \
-  -- \
-  duckdb
-```
-
-More examples are listed at the end of the README.
+See [the documentation][doc] for more examples.
 
 ## Bugs found
 
@@ -122,103 +93,14 @@ would be to submit a PR to tree-splicer to add it to the README.
 
 ## Supported languages
 
-tree-crasher currently ships pre-built executables for the following languages:
+tree-crasher supports 9+ languages, see [the documentation][doc] for details.
 
-- [C](./crates/tree-crasher-c)
-- [CSS](./crates/tree-crasher-css)
-- [JavaScript](./crates/tree-crasher-javascript)
-- [Regex](./crates/tree-crasher-regex)
-- [Rust](./crates/tree-crasher-rust)
-- [SQL](./crates/tree-crasher-sql)
-- [TypeScript](./crates/tree-crasher-typescript)
+## Documentation
 
-Additionally, the following fuzzers can be built from source or installed via
-crates.io:
+Documentation is available [online][doc] or in `./doc`.
 
-- [HTML](./crates/tree-crasher-html)
-- [Ruby](./crates/tree-crasher-ruby)
-
-Languages are very easy to add, so file an issue or a PR if you want a new one!
-
-## Usage
-
-The inputs to tree-crasher are a corpus of files and a command to run. By
-default, tree-crasher passes inputs to the command on stdin, but will replace
-the special symbol `@@` with a filename as seen in the examples above.
-
-tree-crasher saves inputs that match a set of conditions. By default the only
-condition is that the target receives an unhandled signal (e.g., a segfault).
-Extra conditions may be added with the `--interesting*` flags, see `--help`.
-
-tree-crasher does not exit gracefully at the moment; just send SIGINT (ctrl-c)
-when you're done fuzzing.
-
-## How it works
-
-tree-crasher is mostly a thin wrapper around [tree-splicer][tree-splicer] that
-runs it in parallel. When "interesting" test cases are found, they're handed
-off to [treereduce][treereduce].
-
-## Installation
-
-### From a release
-
-Statically-linked Linux binaries are available on the [releases page][releases].
-
-### From crates.io
-
-You can build a released version from [crates.io][crates-io]. You'll need the
-Rust compiler and the [Cargo][cargo] build tool. [rustup][rustup] makes it very
-easy to obtain these. Then, to install the fuzzer for the language `<LANG>`,
-run:
-
-```
-cargo install tree-crasher-<LANG>
-```
-
-This will install binaries in `~/.cargo/bin` by default.
-
-## Build
-
-To build from source, you'll need the Rust compiler and the [Cargo][cargo] build
-tool. [rustup][rustup] makes it very easy to obtain these. Then, get the source:
-
-```bash
-git clone https://github.com/langston-barrett/tree-crasher
-cd tree-crasher
-```
-
-Finally, build everything:
-
-```bash
-cargo build --release
-```
-
-You can find binaries in `target/release`. Run tests with `cargo test`.
-
-## Even more examples
-
-Clang (frontend) (see also [this script](./scripts/corpora/c.sh)):
-
-```sh
-tree-crasher-c corpus/ --interesting-stderr "(?m)^PLEASE " -- clang -c -O0 -o /dev/null -emit-llvm -Xclang -disable-llvm-passes @@.c
-```
-
-[`deno fmt`](https://deno.land/manual@v1.31.3/tools/formatter):
-```sh
-tree-crasher-javascript corpus/ -- deno fmt @@.js
-```
-
-[ClickHouse](https://github.com/ClickHouse/ClickHouse):
-```sh
-tree-crasher-sql corpus/ -- clickhouse local
-```
-
-[cargo]: https://doc.rust-lang.org/cargo/
-[crates-io]: https://crates.io/
+[doc]: https://langston-barrett.github.io/tree-crasher/
 [radamsa]: https://gitlab.com/akihe/radamsa
-[releases]: https://github.com/langston-barrett/tree-crasher/releases
-[rustup]: https://rustup.rs/
 [tree-sitter]: https://tree-sitter.github.io/tree-sitter/
 [tree-splicer]: https://github.com/langston-barrett/tree-splicer
 [treereduce]: https://github.com/langston-barrett/treereduce

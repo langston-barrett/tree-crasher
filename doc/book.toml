@@ -1,0 +1,10 @@
+[book]
+authors = ["Langston Barrett"]
+language = "en"
+multilingual = false
+src = "."
+title = "tree-crasher"
+
+[output.html]
+git-repository-url = "https://github.com/langston-barrett/tree-crasher/tree/main/doc"
+edit-url-template = "https://github.com/langston-barrett/tree-crasher/edit/main/doc/{path}"
