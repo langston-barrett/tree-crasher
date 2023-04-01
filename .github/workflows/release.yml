@@ -17,32 +17,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Deps
-      run: |
-        sudo apt-get install -y musl-tools
-        rustup target add x86_64-unknown-linux-musl
-
-    - name: Build static executables
-      run: |
-        cargo build \
-          --bin ${NAME}-c \
-          --bin ${NAME}-css \
-          --bin ${NAME}-javascript \
-          --bin ${NAME}-regex \
-          --bin ${NAME}-rust \
-          --bin ${NAME}-sql \
-          --bin ${NAME}-typescript \
-          --locked \
-          --release \
-          --target=x86_64-unknown-linux-musl
-        cp target/x86_64-unknown-linux-musl/release/tree-crasher-{c,css,javascript,regex,rust,sql,typescript} .
-
-    - uses: ncipollo/release-action@v1
+    - id: release
+      uses: ncipollo/release-action@v1
       if: ${{ startsWith(github.ref, 'refs/tags/v') }}
       with:
-        artifacts: "tree-crasher-c,tree-crasher-css,tree-crasher-javascript,tree-crasher-regex,tree-crasher-rust,tree-crasher-sql,tree-crasher-typescript"
         artifactErrorsFailBuild: true
-        body: "See [CHANGELOG.md](https://github.com/langston-barrett/tree-crasher/blob/main/doc/CHANGELOG.md)."
+        body: "See [CHANGELOG.md](https://github.com/langston-barrett/${{ env.NAME }}/blob/main/CHANGELOG.md)."
         draft: true
         token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -61,5 +41,90 @@ jobs:
             cargo publish --dry-run --token ${CRATES_IO_TOKEN} -p "${pkg}"
             break
           fi
-          sleep 5
+          # crates.io uses "leaky bucket" rate limiting, with a new token every
+          # 60s. It takes a bit to build each package, so we use 50s.
+          sleep 50
         done
+
+  # Inspired by rustfmt:
+  # https://github.com/rust-lang/rustfmt/blob/master/.github/workflows/upload-assets.yml
+  artifacts:
+    needs: release
+    strategy:
+      matrix:
+        build: [linux-x86_64-gnu, linux-x86_64-musl, macos-x86_64]
+        # build: [linux-x86_64-gnu, linux-x86_64-musl, macos-x86_64, windows-x86_64-gnu, windows-x86_64-msvc]
+        include:
+          - build: linux-x86_64-gnu
+            os: ubuntu-latest
+            rust: stable
+            target: x86_64-unknown-linux-gnu
+          - build: linux-x86_64-musl
+            os: ubuntu-latest
+            rust: stable
+            target: x86_64-unknown-linux-musl
+          # TODO(lb): Can these also be made stable?
+          - build: macos-x86_64
+            os: macos-latest
+            rust: nightly
+            target: x86_64-apple-darwin
+          # TODO(lb): Currently uses unix-specific APIs.
+          # - build: windows-x86_64-gnu
+          #   os: windows-latest
+          #   rust: nightly-x86_64-gnu
+          #   target: x86_64-pc-windows-gnu
+          # - build: windows-x86_64-msvc
+          #   os: windows-latest
+          #   rust: nightly-x86_64-msvc
+          #   target: x86_64-pc-windows-msvc
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install rustup
+      shell: bash
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup-init.sh
+        sh rustup-init.sh -y --default-toolchain none
+        rustup target add ${{ matrix.target }}
+
+    - name: Add mingw64 to path for x86_64-gnu
+      run: echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
+      if: matrix.rust == 'nightly-x86_64-gnu'
+      shell: bash
+
+    - name: Deps
+      if: matrix.target == 'x86_64-unknown-linux-musl'
+      run: |
+        sudo apt-get install -y musl-tools
+
+    - name: Build executables
+      shell: bash
+      run: |
+        for bin in ${NAME}-{c,css,javascript,regex,rust,sql,typescript}; do
+          cargo build \
+            --bin ${bin} \
+            --locked \
+            --release \
+            --target=${{ matrix.target }}
+          cp target/${{ matrix.target }}/release/${bin} ${bin}_${{ matrix.target }}
+        done
+
+    - name: Upload binaries
+      uses: ncipollo/release-action@v1
+      if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+      with:
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        replacesArtifacts: false
+        artifacts: >
+          ${{ env.NAME }}-c_${{ matrix.target }},
+          ${{ env.NAME }}-css_${{ matrix.target }},
+          ${{ env.NAME }}-javascript_${{ matrix.target }},
+          ${{ env.NAME }}-regex_${{ matrix.target }},
+          ${{ env.NAME }}-rust_${{ matrix.target }},
+          ${{ env.NAME }}-typescript_${{ matrix.target }}
+          ${{ env.NAME }}-sql_${{ matrix.target }},
+        body: "See [CHANGELOG.md](https://github.com/langston-barrett/${{ env.NAME }}/blob/main/CHANGELOG.md)."
+        draft: true
+        token: ${{ secrets.GITHUB_TOKEN }}
