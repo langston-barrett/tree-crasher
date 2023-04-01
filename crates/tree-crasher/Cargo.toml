@@ -14,7 +14,7 @@ repository = "https://github.com/langston-barrett/tree-crasher"
 anyhow = { version = "1", optional = false }
 clap-verbosity-flag = { version = "2", optional = false }
 clap = { version = "4", features = ["derive"], optional = false }
-nu-ansi-term = { version = "0.46", optional = false }
+nu-ansi-term = { version = "0.47", optional = false }
 num_cpus = { version = "1", optional = false }
 rand = "0.8"
 regex = "1"
