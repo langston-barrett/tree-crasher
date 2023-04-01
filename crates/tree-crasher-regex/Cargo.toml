@@ -1,6 +1,6 @@
 [package]
 name = "tree-crasher-regex"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "Easy-to-use grammar-based black-box fuzzer"
 keywords = ["black-box", "fuzzer", "grammar-based"]
@@ -12,5 +12,5 @@ repository = "https://github.com/langston-barrett/tree-crasher"
 
 [dependencies]
 anyhow = "1"
-tree-crasher = { version = "0.2.0", path = "../tree-crasher" }
+tree-crasher = { version = "0.2.1", path = "../tree-crasher" }
 tree-sitter-regex = { git = "https://github.com/tree-sitter/tree-sitter-regex" }
