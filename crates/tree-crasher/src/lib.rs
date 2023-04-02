@@ -32,6 +32,11 @@ pub struct Args {
     #[arg(help_heading = "Mutation options", short, long, default_value_t = 16)]
     pub mutations: usize,
 
+    /// Use Radamsa for mutations; ignore all other mutation options
+    #[cfg(feature = "radamsa")]
+    #[arg(help_heading = "Mutation options", short, long)]
+    pub radamsa: bool,
+
     /// Run a single thread and show stdout, stderr of target
     #[arg(short, long)]
     pub debug: bool,
@@ -222,6 +227,37 @@ fn job(
     files: &HashMap<String, (Vec<u8>, Tree)>,
     chk: CmdCheck,
 ) {
+    if files.is_empty() {
+        eprintln!("No files provided.");
+        return;
+    }
+    #[cfg(feature = "radamsa")]
+    if args.radamsa {
+        unsafe { radamsa_sys::radamsa_init() };
+        let mut rng = rand::thread_rng();
+        let file_bytes: Vec<_> = files.values().map(|(bytes, _tree)| bytes).collect();
+        loop {
+            const MAX_SIZE: usize = 4096;
+            // TODO: Mutate in-place
+            let mut input: Vec<u8> = file_bytes
+                .get(rng.gen_range(0..files.len()))
+                .unwrap()
+                .to_vec();
+            let mut mutant = vec![0u8; MAX_SIZE];
+            let out_len = unsafe {
+                radamsa_sys::radamsa(
+                    input.as_mut_ptr(),
+                    input.len(),
+                    mutant.as_mut_ptr(),
+                    MAX_SIZE,
+                    0,
+                )
+            };
+            assert!(out_len <= MAX_SIZE);
+            mutant.truncate(out_len);
+            check(language, node_types1, &chk, &mutant);
+        }
+    }
     loop {
         let config = Config {
             chaos: args.chaos,
@@ -276,7 +312,17 @@ pub fn main(language: tree_sitter::Language, node_types_json_str: &'static str) 
     if args.debug {
         eprintln!("Spawning threads...");
     }
+    #[cfg(not(feature = "radamsa"))]
     let jobs = if args.debug { 1 } else { args.jobs };
+    #[cfg(feature = "radamsa")]
+    let jobs = if args.debug {
+        if args.jobs != 1 {
+            eprintln!("[WARN] Radamsa can only be used with one thread.");
+        }
+        1
+    } else {
+        args.jobs
+    };
     std::thread::scope(|s| {
         for _ in 0..jobs {
             s.spawn(|| {

@@ -94,3 +94,5 @@ jobs:
     - uses: Swatinem/rust-cache@6fd3edff6979b79f87531400ad694fb7f2c84b1f
     - run: cargo test --locked --no-run
     - run: cargo test
+    - run: cargo test --locked --no-run --features=radamsa
+    - run: cargo test --features=radamsa
