@@ -12,9 +12,9 @@ maximal ease-of-use by using off-the-shelf tree-sitter grammars and not
 requiring any instrumentation (nor even source code) for the target. In short,
 tree-crasher wants to be the [Radamsa][radamsa] of grammar-based fuzzing.
 
-tree-sitter grammars are resistant to syntax errors. Therefore, tree-crasher
-can even mutate syntactically-invalid inputs! You can also use tree-crasher
-with an incomplete grammar.
+
+
+
 
 tree-crasher uses [treereduce][treereduce] to automatically minimize generated
 test-cases.
