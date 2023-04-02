@@ -116,7 +116,7 @@ fn parse(language: tree_sitter::Language, code: &str) -> Result<tree_sitter::Tre
 }
 
 #[allow(clippy::too_many_arguments)]
-fn check(
+fn make_check(
     debug: bool,
     timeout: Duration,
     check: Vec<String>,
@@ -167,6 +167,51 @@ fn check(
 
 const BATCH: usize = 100_000; // not all materialized at once
 
+fn check(language: Language, node_types: &treereduce::NodeTypes, chk: &CmdCheck, inp: &[u8]) {
+    let state = match chk.start(inp) {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("Problem when running target: {e}");
+            return;
+        }
+    };
+    let (interesting, status, stdout, stderr) = chk.wait_with_output(state).unwrap();
+    let sig = status.and_then(|s| s.signal());
+    if interesting || sig.is_some() {
+        if let Some(s) = sig {
+            if s == 6 {
+                return;
+            }
+            eprintln!("signal {s}!");
+        } else {
+            eprintln!("interesting!");
+        }
+        let mut rng = rand::thread_rng();
+        let i = rng.gen_range(0..10192);
+        std::fs::write(format!("tree-crasher-{i}.out"), inp).unwrap();
+        std::fs::write(format!("tree-crasher-{i}.stdout"), stdout).unwrap();
+        std::fs::write(format!("tree-crasher-{i}.stderr"), stderr).unwrap();
+        let tree = parse(language, &String::from_utf8_lossy(inp)).unwrap();
+        match treereduce::treereduce_multi_pass(
+            language,
+            node_types.clone(),
+            treereduce::Original::new(tree, inp.to_vec()),
+            treereduce::Config {
+                check: chk.clone(),
+                jobs: 1,
+                min_reduction: 2,
+                replacements: HashMap::new(),
+            },
+            Some(8),
+        ) {
+            Err(e) => eprintln!("Failed to reduce! {e}"),
+            Ok((reduced, _)) => {
+                std::fs::write(format!("tree-crasher-{i}.reduced.out"), reduced.text).unwrap();
+            }
+        }
+    }
+}
+
 // TODO: print executions/sec
 fn job(
     language: Language,
@@ -189,49 +234,7 @@ fn job(
             tests: BATCH,
         };
         for out in splice(config, files) {
-            let state = match chk.start(out.as_slice()) {
-                Ok(s) => s,
-                Err(e) => {
-                    eprintln!("Problem when running target: {e}");
-                    continue;
-                }
-            };
-            let (interesting, status, stdout, stderr) = chk.wait_with_output(state).unwrap();
-            let sig = status.and_then(|s| s.signal());
-            if interesting || sig.is_some() {
-                if let Some(s) = sig {
-                    if s == 6 {
-                        continue;
-                    }
-                    eprintln!("signal {s}!");
-                } else {
-                    eprintln!("interesting!");
-                }
-                let mut rng = rand::thread_rng();
-                let i = rng.gen_range(0..10192);
-                std::fs::write(format!("tree-crasher-{i}.out"), &out).unwrap();
-                std::fs::write(format!("tree-crasher-{i}.stdout"), stdout).unwrap();
-                std::fs::write(format!("tree-crasher-{i}.stderr"), stderr).unwrap();
-                let tree = parse(language, &String::from_utf8_lossy(&out)).unwrap();
-                match treereduce::treereduce_multi_pass(
-                    language,
-                    node_types1.clone(),
-                    treereduce::Original::new(tree, out.clone()),
-                    treereduce::Config {
-                        check: chk.clone(),
-                        jobs: 1,
-                        min_reduction: 2,
-                        replacements: HashMap::new(),
-                    },
-                    Some(8),
-                ) {
-                    Err(e) => eprintln!("Failed to reduce! {e}"),
-                    Ok((reduced, _)) => {
-                        std::fs::write(format!("tree-crasher-{i}.reduced.out"), reduced.text)
-                            .unwrap();
-                    }
-                }
-            }
+            check(language, node_types1, &chk, &out);
         }
     }
 }
@@ -257,7 +260,7 @@ pub fn main(language: tree_sitter::Language, node_types_json_str: &'static str) 
             files.insert(String::from(path.to_string_lossy()), (s.into_bytes(), tree));
         }
     }
-    let chk = check(
+    let chk = make_check(
         args.debug,
         Duration::from_millis(args.timeout),
         args.check.clone(),
