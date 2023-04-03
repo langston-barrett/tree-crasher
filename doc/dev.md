@@ -87,3 +87,42 @@ cargo clippy --workspace -- --deny warnings
 - Verify that the release artifacts work as intended
 - Release the pre-release created by CI
 - Check that the crates were properly uploaded to crates.io
+
+## Warnings
+
+Certain warnings are disallowed in the CI build. You can reproduce the behavior
+of the CI build by running `cargo check`, `cargo build`, or `cargo test` like
+so:
+
+```sh
+env RUSTFLAGS="@$PWD/rustc-flags" cargo check
+```
+
+Using a flag file for this purpose achieves several objectives:
+
+- It frictionlessly allows code with warnings during local development
+- It makes it easy to reproduce the CI build process locally
+- It makes it easy to maintain the list of warnings
+- It [maintains forward-compatibility][anti-pat] with future rustc warnings
+- It ensures the flags are consistent across all crates in the project
+
+This flag file rejects all `rustc` warnings by default, as well as a subset of
+[allowed-by-default lints][allowed-by-default]. The goal is to balance 
+high-quality, maintainable code with not annoying developers.
+
+To allow a lint in one spot, use:
+
+```rust
+#[allow(name_of_lint)]
+```
+
+To enable these warnings on a semi-permanent basis, create a [Cargo
+configuration file][cargo-conf]:
+
+```sh
+mkdir .cargo
+printf "[build]\nrustflags = [\"@${PWD}/rustc-flags\"]\n" > .cargo/config.toml
+```
+
+[allowed-by-default]: https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html
+[anti-pat]: https://rust-unofficial.github.io/patterns/anti_patterns/deny-warnings.html#denywarnings
