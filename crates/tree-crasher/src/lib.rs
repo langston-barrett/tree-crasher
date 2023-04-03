@@ -112,7 +112,7 @@ fn read_file(file: &PathBuf) -> Result<String> {
     fs::read_to_string(file).with_context(|| format!("Failed to read file {}", file.display()))
 }
 
-fn parse(language: tree_sitter::Language, code: &str) -> Result<tree_sitter::Tree> {
+fn parse(language: Language, code: &str) -> Result<Tree> {
     let mut parser = tree_sitter::Parser::new();
     parser
         .set_language(language)
@@ -276,7 +276,7 @@ fn job(
 }
 
 // TODO: graceful exit
-pub fn main(language: tree_sitter::Language, node_types_json_str: &'static str) -> Result<()> {
+pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()> {
     let args = Args::parse();
     debug_assert!(args.interesting_stdout.is_some() || args.uninteresting_stdout.is_none());
     debug_assert!(args.interesting_stderr.is_some() || args.uninteresting_stderr.is_none());

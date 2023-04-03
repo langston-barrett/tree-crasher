@@ -92,7 +92,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: Swatinem/rust-cache@6fd3edff6979b79f87531400ad694fb7f2c84b1f
-    - run: cargo test --locked --no-run
-    - run: cargo test
-    - run: cargo test --locked --no-run --features=radamsa
-    - run: cargo test --features=radamsa
+    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run
+    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test
+    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run --features=radamsa
+    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --features=radamsa
