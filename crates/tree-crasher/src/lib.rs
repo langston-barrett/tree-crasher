@@ -3,6 +3,7 @@ use std::fs;
 use std::os::unix::process::ExitStatusExt;
 use std::path::PathBuf;
 use std::time::Duration;
+use std::time::Instant;
 
 use anyhow::{Context, Result};
 use clap::Parser;
@@ -27,6 +28,10 @@ pub struct Args {
     /// Percent of deletion mutations - the rest are splices
     #[arg(help_heading = "Mutation options", long, default_value_t = 5)]
     pub deletions: u8,
+
+    /// Approximate maximum file size to produce (bytes); default = 1MiB
+    #[arg(help_heading = "Mutation options", long, default_value_t = 1048576)]
+    pub max_size: usize,
 
     /// Number of mutations per test
     #[arg(help_heading = "Mutation options", short, long, default_value_t = 16)]
@@ -172,20 +177,26 @@ fn make_check(
 
 const BATCH: usize = 100_000; // not all materialized at once
 
-fn check(language: Language, node_types: &treereduce::NodeTypes, chk: &CmdCheck, inp: &[u8]) {
+fn check(
+    language: Language,
+    node_types: &treereduce::NodeTypes,
+    chk: &CmdCheck,
+    inp: &[u8],
+) -> i32 {
     let state = match chk.start(inp) {
         Ok(s) => s,
         Err(e) => {
             eprintln!("Problem when running target: {e}");
-            return;
+            return -1;
         }
     };
     let (interesting, status, stdout, stderr) = chk.wait_with_output(state).unwrap();
+    let code = status.and_then(|s| s.code()).unwrap_or(-1);
     let sig = status.and_then(|s| s.signal());
     if interesting || sig.is_some() {
         if let Some(s) = sig {
             if s == 6 {
-                return;
+                return code;
             }
             eprintln!("signal {s}!");
         } else {
@@ -203,6 +214,7 @@ fn check(language: Language, node_types: &treereduce::NodeTypes, chk: &CmdCheck,
             treereduce::Original::new(tree, inp.to_vec()),
             treereduce::Config {
                 check: chk.clone(),
+                delete_non_optional: true,
                 jobs: 1,
                 min_reduction: 2,
                 replacements: HashMap::new(),
@@ -215,6 +227,7 @@ fn check(language: Language, node_types: &treereduce::NodeTypes, chk: &CmdCheck,
             }
         }
     }
+    code
 }
 
 // TODO: print executions/sec
@@ -266,11 +279,20 @@ fn job(
             // intra_splices: 10,
             inter_splices: args.mutations,
             node_types: node_types2.clone(),
+            max_size: args.max_size,
+            reparse: usize::MAX,
             seed: args.seed,
             tests: BATCH,
         };
+        let start = Instant::now();
+        let mut execs = 0;
         for out in splice(config, files) {
-            check(language, node_types1, &chk, &out);
+            let _code = check(language, node_types1, &chk, &out);
+            execs += 1;
+            let secs = start.elapsed().as_secs();
+            if execs % 10_000 == 0 {
+                println!("execs/sec: {}", execs / secs);
+            }
         }
     }
 }

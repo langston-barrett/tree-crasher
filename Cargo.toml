@@ -13,6 +13,11 @@ members = [
     "crates/tree-crasher-solidity",
 ]
 
+# https://github.com/mstange/samply#turn-on-debug-info-for-full-stacks
+[profile.profiling]
+inherits = "release"
+debug = true
+
 # https://nnethercote.github.io/perf-book/build-configuration.html
 [profile.release]
 lto = true

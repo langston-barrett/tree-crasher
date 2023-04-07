@@ -12,10 +12,6 @@ maximal ease-of-use by using off-the-shelf tree-sitter grammars and not
 requiring any instrumentation (nor even source code) for the target. In short,
 tree-crasher wants to be the [Radamsa][radamsa] of grammar-based fuzzing.
 
-
-
-
-
 tree-crasher uses [treereduce][treereduce] to automatically minimize generated
 test-cases.
 
