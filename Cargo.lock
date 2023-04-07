@@ -644,15 +644,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tracing-mutex"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3df21ca58f0e0b5ee3181d8eebb8f2ec16d6ecbb2a04f351aa6abd7cf700f22"
-dependencies = [
- "lazy_static",
-]
-
-[[package]]
 name = "tree-crasher"
 version = "0.2.3"
 dependencies = [
@@ -790,6 +781,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-edit"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9ed3213ee656e99748eca539913b5c90df3d52618d9a1714e0935013955c8031"
+dependencies = [
+ "tree-sitter",
+ "tree-sitter-traversal",
+]
+
+[[package]]
 name = "tree-sitter-html"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -848,6 +849,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-traversal"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df8a158225e4a4d8505f071340bba9edd109b23f01b70540dccb7c799868f307"
+dependencies = [
+ "tree-sitter",
+]
+
+[[package]]
 name = "tree-sitter-typescript"
 version = "0.20.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -869,14 +879,14 @@ dependencies = [
  "serde_json",
  "tracing",
  "tree-sitter",
- "tree-sitter-edit",
+ "tree-sitter-edit 0.1.2",
 ]
 
 [[package]]
 name = "treereduce"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c133f1acecd2f4051a48b827952bbf41b7ed6f63ea5e2abaca6ba0dbd02ae40c"
+checksum = "88f52e6af7073d1baf35773b1432e457e414c4bf35848c049a34b3a22c1ede02"
 dependencies = [
  "log",
  "regex",
@@ -885,9 +895,8 @@ dependencies = [
  "tempfile",
  "thiserror",
  "tracing",
- "tracing-mutex",
  "tree-sitter",
- "tree-sitter-edit",
+ "tree-sitter-edit 0.3.0",
  "wait-timeout",
 ]
 

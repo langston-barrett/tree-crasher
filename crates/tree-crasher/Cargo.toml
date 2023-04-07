@@ -18,7 +18,7 @@ nu-ansi-term = { version = "0.47", optional = false }
 num_cpus = { version = "1", optional = false }
 rand = "0.8"
 regex = "1"
-treereduce = "0.2.1"
+treereduce = "0.2.2"
 tree-sitter = "0.20"
 tree-splicer = "0.3"
 radamsa-sys = { version = "0.1", optional = true }
