@@ -10,6 +10,7 @@ members = [
     "crates/tree-crasher-rust",
     "crates/tree-crasher-sql",
     "crates/tree-crasher-typescript",
+    "crates/tree-crasher-solidity",
 ]
 
 # https://nnethercote.github.io/perf-book/build-configuration.html
