@@ -2,6 +2,11 @@
 
 <!-- https://keepachangelog.com/en/1.0.0/ -->
 
+## [0.3.0] - 2023-04-07
+
+- Bump dependencies to fix some panics
+- Support Solidity
+
 ## [0.2.2] - 2023-04-01
 
 - Releases now include executables for OSX
@@ -33,3 +38,4 @@ Initial release!
 [0.2.0]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.0
 [0.2.1]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.1
 [0.2.2]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.2
+[0.3.0]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.3.0
