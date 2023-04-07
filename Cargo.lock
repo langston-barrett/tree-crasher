@@ -645,7 +645,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -662,7 +662,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-c"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -671,7 +671,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-css"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -680,7 +680,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-html"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -689,7 +689,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-javascript"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -698,7 +698,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-regex"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -707,7 +707,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-ruby"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -716,7 +716,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-rust"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -725,7 +725,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-solidity"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -734,7 +734,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-sql"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
@@ -743,7 +743,7 @@ dependencies = [
 
 [[package]]
 name = "tree-crasher-typescript"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "tree-crasher",
