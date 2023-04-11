@@ -34,7 +34,7 @@ jobs:
       run: |
         # tree-crasher-{regex,sql} currently aren't suitable for upload to
         # crates.io because they have git dependencies
-        for pkg in tree-crasher{,-c,-css,-html,-javascript,-rust,-typescript}; do
+        for pkg in tree-crasher{,-c,-css,-html,-javascript,-python,-rust,-typescript}; do
           if [[ ${PUSH} == true ]]; then
             cargo publish --token ${CRATES_IO_TOKEN} -p "${pkg}"
           else
@@ -101,7 +101,7 @@ jobs:
     - name: Build executables
       shell: bash
       run: |
-        for bin in ${NAME}-{c,css,javascript,regex,rust,sql,typescript}; do
+        for bin in ${NAME}-{c,css,javascript,python,regex,rust,sql,typescript}; do
           cargo build \
             --bin ${bin} \
             --locked \
@@ -121,6 +121,7 @@ jobs:
           ${{ env.NAME }}-c_${{ matrix.target }},
           ${{ env.NAME }}-css_${{ matrix.target }},
           ${{ env.NAME }}-javascript_${{ matrix.target }},
+          ${{ env.NAME }}-python_${{ matrix.target }},
           ${{ env.NAME }}-regex_${{ matrix.target }},
           ${{ env.NAME }}-rust_${{ matrix.target }},
           ${{ env.NAME }}-typescript_${{ matrix.target }},

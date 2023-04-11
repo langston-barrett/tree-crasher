@@ -79,6 +79,7 @@ jobs:
           --bin ${NAME}-c \
           --bin ${NAME}-css \
           --bin ${NAME}-javascript \
+          --bin ${NAME}-python \
           --bin ${NAME}-regex \
           --bin ${NAME}-rust \
           --bin ${NAME}-sql \
