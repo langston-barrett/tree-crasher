@@ -5,6 +5,7 @@ members = [
     "crates/tree-crasher-css",
     "crates/tree-crasher-html",
     "crates/tree-crasher-javascript",
+    "crates/tree-crasher-python",
     "crates/tree-crasher-regex",
     "crates/tree-crasher-ruby",
     "crates/tree-crasher-rust",
