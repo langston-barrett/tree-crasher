@@ -3,6 +3,8 @@
 set -e
 
 repos=(
+  "tc39/test262"
+  "jquery/esprima"
   "v8/v8"
   "mozilla/gecko-dev"
   "svaarala/duktape"
@@ -13,6 +15,7 @@ repos=(
   "cesanta/elk"
   "Starlight-JS/starlight"
   "denoland/deno"
+  "facebook/hermes"
 )
 mkdir -p js
 for repo in "${repos[@]}"; do
