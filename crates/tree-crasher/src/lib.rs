@@ -12,8 +12,7 @@ use rand::Rng;
 use regex::Regex;
 use tree_sitter::Language;
 use tree_sitter::Tree;
-use tree_splicer::splice::splice;
-use tree_splicer::splice::Config;
+use tree_splicer::splice::{Config, Splicer};
 use treereduce::Check;
 use treereduce::CmdCheck;
 
@@ -282,11 +281,13 @@ fn job(
             max_size: args.max_size,
             reparse: usize::MAX,
             seed: args.seed,
-            tests: BATCH,
         };
         let start = Instant::now();
         let mut execs = 0;
-        for out in splice(config, files) {
+        for (i, out) in Splicer::new(config, files).enumerate() {
+            if i == BATCH {
+                break;
+            }
             let _code = check(language, node_types1, &chk, &out);
             execs += 1;
             let secs = start.elapsed().as_secs();
