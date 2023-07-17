@@ -210,9 +210,9 @@ fn check(
         let tree = parse(language, &String::from_utf8_lossy(inp)).unwrap();
         match treereduce::treereduce_multi_pass(
             language,
-            node_types.clone(),
+            node_types,
             treereduce::Original::new(tree, inp.to_vec()),
-            treereduce::Config {
+            &treereduce::Config {
                 check: chk.clone(),
                 delete_non_optional: true,
                 jobs: 1,
