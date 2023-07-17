@@ -821,8 +821,8 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-regex"
-version = "0.20.0"
-source = "git+https://github.com/tree-sitter/tree-sitter-regex#e1cfca3c79896ff79842f057ea13e529b66af636"
+version = "1.0.0"
+source = "git+https://github.com/tree-sitter/tree-sitter-regex#17a3293714312c691ef14217f60593a3d093381c"
 dependencies = [
  "cc",
  "tree-sitter",
