@@ -2,6 +2,11 @@
 
 <!-- https://keepachangelog.com/en/1.0.0/ -->
 
+## [0.4.0] - 2023-07-17
+
+- Bump dependencies
+- Support Python
+
 ## [0.3.0] - 2023-04-07
 
 - Bump dependencies to fix some panics
@@ -39,3 +44,4 @@ Initial release!
 [0.2.1]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.1
 [0.2.2]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.2.2
 [0.3.0]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.3.0
+[0.4.0]: https://github.com/langston-barrett/tree-crasher/releases/tag/v0.4.0

@@ -121,7 +121,6 @@ jobs:
           ${{ env.NAME }}-c_${{ matrix.target }},
           ${{ env.NAME }}-css_${{ matrix.target }},
           ${{ env.NAME }}-javascript_${{ matrix.target }},
-          ${{ env.NAME }}-python_${{ matrix.target }},
           ${{ env.NAME }}-regex_${{ matrix.target }},
           ${{ env.NAME }}-rust_${{ matrix.target }},
           ${{ env.NAME }}-typescript_${{ matrix.target }},
