@@ -81,6 +81,7 @@ jobs:
           --bin ${NAME}-javascript \
           --bin ${NAME}-regex \
           --bin ${NAME}-rust \
+          --bin ${NAME}-solidity \
           --bin ${NAME}-sql \
           --bin ${NAME}-typescript \
           --locked \

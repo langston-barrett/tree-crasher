@@ -32,7 +32,7 @@ jobs:
         # Only push on actual release tags
         PUSH: ${{ startsWith(github.ref, 'refs/tags/v') }}
       run: |
-        # tree-crasher-{regex,sql} currently aren't suitable for upload to
+        # tree-crasher-{regex,solidity,sql} currently aren't suitable for upload to
         # crates.io because they have git dependencies
         for pkg in tree-crasher{,-c,-css,-html,-javascript,-python,-rust,-typescript}; do
           if [[ ${PUSH} == true ]]; then
@@ -101,7 +101,7 @@ jobs:
     - name: Build executables
       shell: bash
       run: |
-        for bin in ${NAME}-{c,css,javascript,python,regex,rust,sql,typescript}; do
+        for bin in ${NAME}-{c,css,javascript,python,regex,rust,solidity,sql,typescript}; do
           cargo build \
             --bin ${bin} \
             --locked \
@@ -125,6 +125,7 @@ jobs:
           ${{ env.NAME }}-regex_${{ matrix.target }},
           ${{ env.NAME }}-rust_${{ matrix.target }},
           ${{ env.NAME }}-typescript_${{ matrix.target }},
+          ${{ env.NAME }}-solidity_${{ matrix.target }}
           ${{ env.NAME }}-sql_${{ matrix.target }}
         body: "See [CHANGELOG.md](https://github.com/langston-barrett/${{ env.NAME }}/blob/main/CHANGELOG.md)."
         draft: true
