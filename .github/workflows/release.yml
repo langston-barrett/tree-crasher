@@ -101,7 +101,7 @@ jobs:
     - name: Build executables
       shell: bash
       run: |
-        for bin in ${NAME}-{c,css,javascript,python,regex,rust,solidity,sql,typescript}; do
+        for bin in ${NAME}-{c,css,javascript,regex,rust,solidity,sql,typescript}; do
           cargo build \
             --bin ${bin} \
             --locked \
