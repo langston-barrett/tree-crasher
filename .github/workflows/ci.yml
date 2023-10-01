@@ -19,7 +19,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup mdBook
       uses: peaceiris/actions-mdbook@v1
@@ -54,7 +54,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Format
       run: cargo fmt && git diff --exit-code
     - name: Deps
@@ -68,7 +68,7 @@ jobs:
   static:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Deps
       run: |
         sudo apt-get install -y musl-tools
@@ -91,7 +91,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: Swatinem/rust-cache@e207df5d269b42b69c8bc5101da26f7d31feddb4
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test
