@@ -702,6 +702,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-crasher-nix"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "tree-crasher",
+ "tree-sitter-nix",
+]
+
+[[package]]
 name = "tree-crasher-python"
 version = "0.4.0"
 dependencies = [
@@ -819,6 +828,16 @@ name = "tree-sitter-javascript"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2490fab08630b2c8943c320f7b63473cbf65511c8d83aec551beb9b4375906ed"
+dependencies = [
+ "cc",
+ "tree-sitter",
+]
+
+[[package]]
+name = "tree-sitter-nix"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae8c93b7dd2afcd9667daae048135be9ee268e9e3900f4d7d0556a63ec5336b1"
 dependencies = [
  "cc",
  "tree-sitter",
