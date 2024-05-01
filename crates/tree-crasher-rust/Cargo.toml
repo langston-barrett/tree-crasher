@@ -13,4 +13,4 @@ repository = "https://github.com/langston-barrett/tree-crasher"
 [dependencies]
 anyhow = "1"
 tree-crasher = { version = "0.4.0", path = "../tree-crasher" }
-tree-sitter-rust = "0.20"
+tree-sitter-rust = "0.21"
