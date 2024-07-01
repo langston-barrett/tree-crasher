@@ -203,9 +203,9 @@ fn check(
         }
         let mut rng = rand::thread_rng();
         let i = rng.gen_range(0..10192);
-        std::fs::write(format!("tree-crasher-{i}.out"), inp).unwrap();
-        std::fs::write(format!("tree-crasher-{i}.stdout"), stdout).unwrap();
-        std::fs::write(format!("tree-crasher-{i}.stderr"), stderr).unwrap();
+        fs::write(format!("tree-crasher-{i}.out"), inp).unwrap();
+        fs::write(format!("tree-crasher-{i}.stdout"), stdout).unwrap();
+        fs::write(format!("tree-crasher-{i}.stderr"), stderr).unwrap();
         let tree = parse(language, &String::from_utf8_lossy(inp)).unwrap();
         match treereduce::treereduce_multi_pass(
             language,
@@ -222,7 +222,7 @@ fn check(
         ) {
             Err(e) => eprintln!("Failed to reduce! {e}"),
             Ok((reduced, _)) => {
-                std::fs::write(format!("tree-crasher-{i}.reduced.out"), reduced.text).unwrap();
+                fs::write(format!("tree-crasher-{i}.reduced.out"), reduced.text).unwrap();
             }
         }
     }

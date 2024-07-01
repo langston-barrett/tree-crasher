@@ -1,4 +1,5 @@
 --deny=absolute_paths_not_starting_with_crate
+--deny=dead_code
 --deny=elided_lifetimes_in_paths
 --deny=explicit_outlives_requirements
 --deny=keyword_idents
@@ -25,6 +26,5 @@
 --deny=unused_lifetimes
 --deny=unused_macro_rules
 --deny=unused_qualifications
---deny=unused_tuple_struct_fields
 --deny=variant_size_differences
 --deny=warnings
