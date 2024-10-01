@@ -27,9 +27,9 @@ dependencies = [
 
 [[package]]
 name = "anstyle"
-version = "1.0.0"
+version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41ed9a86bf92ae6580e0a31281f65a1b1d867c0cc68d5346e2ae128dddfa6a7d"
+checksum = "1bec1de6f59aedf83baf9ff929c98f2ad654b97c9510f4e70cf6f661d49fd5b1"
 
 [[package]]
 name = "anstyle-parse"
@@ -130,9 +130,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.8"
+version = "4.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "84b3edb18336f4df585bc9aa31dd99c036dfa5dc5e9a2939a722a188f3a8970d"
+checksum = "b0956a43b323ac1afaffc053ed5c4b7c1f1800bacd1683c353aabbb752515dd3"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -150,9 +150,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.8"
+version = "4.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1c09dd5ada6c6c78075d6fd0da3f90d8080651e2d6cc8eb2f1aaa4034ced708"
+checksum = "4d72166dd41634086d5803a47eb71ae740e61d84709c36f3c34110173db3961b"
 dependencies = [
  "anstream",
  "anstyle",
@@ -162,9 +162,9 @@ dependencies = [
 
 [[package]]
 name = "clap_derive"
-version = "4.5.8"
+version = "4.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2bac35c6dafb060fd4d275d9a4ffae97917c13a6327903a8be2153cd964f7085"
+checksum = "4ac6a0c7b1a9e9a5186361f67dfa1b88213572f427fb9ab038efb2bd8c582dab"
 dependencies = [
  "heck",
  "proc-macro2",
