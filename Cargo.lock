@@ -870,9 +870,9 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-solidity"
-version = "1.2.7"
+version = "1.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0aa874a7bde4e3f1ef14f51f34a4a73e6d2a1f44856a6429e7d311ab6a476b3c"
+checksum = "12e75b12cb5c30eabde6e7ee181c18d8582b8f4ea965a989b9eed1cb322a7b61"
 dependencies = [
  "cc",
  "tree-sitter",
