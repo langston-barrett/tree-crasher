@@ -61,7 +61,7 @@ jobs:
       run: |
         rustup update
         rustup component add clippy
-    - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
+    - uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
     - name: Lint
       run: cargo clippy -- --deny warnings
 
@@ -73,7 +73,7 @@ jobs:
       run: |
         sudo apt-get install -y musl-tools
         rustup target add x86_64-unknown-linux-musl
-    - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
+    - uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
     - run: |
         cargo build \
           --bin ${NAME}-c \
@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
+    - uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run --features=radamsa
