@@ -20,7 +20,7 @@ rand = "0.8"
 regex = "1"
 treereduce = "0.3.1"
 tree-sitter = "0.20"
-tree-splicer = "0.5"
+tree-splicer = "0.6"
 radamsa-sys = { version = "0.1", optional = true }
 
 [features]
