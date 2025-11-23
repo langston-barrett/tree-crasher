@@ -179,7 +179,7 @@ options to learn more.</p>
 <pre><code class="language-bash">git ls-files -z --exclude-standard '*.md' | xargs -0 mdlynx
 </code></pre>
 <h2 id="mypy"><a class="header" href="#mypy">Mypy</a></h2>
-<p>We lint and format Python code with <a href="https://www.mypy-lang.org/">mypy</a> in <code>--strict</code> mode.</p>
+<p>We lint Python code with <a href="https://www.mypy-lang.org/">mypy</a> in <code>--strict</code> mode.</p>
 <pre><code class="language-sh">git ls-files -z --exclude-standard '*.py' | xargs -0 mypy --strict
 </code></pre>
 <h2 id="ruff"><a class="header" href="#ruff">Ruff</a></h2>
@@ -188,12 +188,11 @@ options to learn more.</p>
 git ls-files -z --exclude-standard '*.py' | xargs -0 ruff check
 </code></pre>
 <h2 id="shellcheck"><a class="header" href="#shellcheck">ShellCheck</a></h2>
-<p>We lint shell scripts with [ShellCheck].</p>
+<p>We lint shell scripts with <a href="https://www.shellcheck.net/">ShellCheck</a>.</p>
 <pre><code class="language-sh">git ls-files -z --exclude-standard '*.sh' | xargs -0 shellcheck
 </code></pre>
-<p>[ShellCheck] https://www.shellcheck.net/</p>
 <h2 id="taplo"><a class="header" href="#taplo">taplo</a></h2>
-<p>We format TOML files with [taplo].</p>
+<p>We format TOML files with <a href="https://taplo.tamasfe.dev/">taplo</a>.</p>
 <pre><code class="language-bash">git ls-files -z --exclude-standard '*.toml' | xargs -0 taplo format
 </code></pre>
 <h2 id="typos"><a class="header" href="#typos">typos</a></h2>
