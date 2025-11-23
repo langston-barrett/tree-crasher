@@ -201,8 +201,8 @@ fn check(
         } else {
             eprintln!("interesting!");
         }
-        let mut rng = rand::thread_rng();
-        let i = rng.gen_range(0..10192);
+        let mut rng = rand::rng();
+        let i = rng.random_range(0..10192);
         fs::write(format!("tree-crasher-{i}.out"), inp).unwrap();
         fs::write(format!("tree-crasher-{i}.stdout"), stdout).unwrap();
         fs::write(format!("tree-crasher-{i}.stderr"), stderr).unwrap();
@@ -246,13 +246,13 @@ fn job(
     #[cfg(feature = "radamsa")]
     if args.radamsa {
         unsafe { radamsa_sys::radamsa_init() };
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let file_bytes: Vec<_> = files.values().map(|(bytes, _tree)| bytes).collect();
         loop {
             const MAX_SIZE: usize = 4096;
             // TODO: Mutate in-place
             let mut input: Vec<u8> = file_bytes
-                .get(rng.gen_range(0..files.len()))
+                .get(rng.random_range(0..files.len()))
                 .unwrap()
                 .to_vec();
             let mut mutant = vec![0u8; MAX_SIZE];
