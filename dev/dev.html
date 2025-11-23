@@ -214,22 +214,10 @@ with <a href="https://rustup.rs/">rustup</a> like so:</p>
 </li>
 </ul>
 <h2 id="warnings"><a class="header" href="#warnings">Warnings</a></h2>
-<p>Certain warnings are disallowed in the CI build. You can reproduce the behavior
-of the CI build by running <code>cargo check</code>, <code>cargo build</code>, or <code>cargo test</code> like
-so:</p>
-<pre><code class="language-sh">env RUSTFLAGS=&quot;@$PWD/rustc-flags&quot; cargo check
-</code></pre>
-<p>Using a flag file for this purpose achieves several objectives:</p>
-<ul>
-<li>It frictionlessly allows code with warnings during local development</li>
-<li>It makes it easy to reproduce the CI build process locally</li>
-<li>It makes it easy to maintain the list of warnings</li>
-<li>It <a href="https://rust-unofficial.github.io/patterns/anti_patterns/deny-warnings.html#denywarnings">maintains forward-compatibility</a> with future rustc warnings</li>
-<li>It ensures the flags are consistent across all crates in the project</li>
-</ul>
-<p>This flag file rejects all <code>rustc</code> warnings by default, as well as a subset of
-<a href="https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html">allowed-by-default lints</a>. The goal is to balance
-high-quality, maintainable code with not annoying developers.</p>
+<p>Certain warnings are disallowed in the CI build. This includes all <code>rustc</code>
+warnings, as well as a subset of <a href="https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html">allowed-by-default lints</a>.
+The goal is to balance high-quality, maintainable code with not annoying
+developers.</p>
 <p>To allow a lint in one spot, use:</p>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -237,11 +225,6 @@ high-quality, maintainable code with not annoying developers.</p>
 </span>#[allow(name_of_lint)]
 <span class="boring">}
 </span></code></pre></pre>
-<p>To enable these warnings on a semi-permanent basis, create a [Cargo
-configuration file][cargo-conf]:</p>
-<pre><code class="language-sh">mkdir .cargo
-printf &quot;[build]\nrustflags = [\&quot;@${PWD}/rustc-flags\&quot;]\n&quot; &gt; .cargo/config.toml
-</code></pre>
 
                     </main>
 
