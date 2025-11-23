@@ -62,7 +62,7 @@ git ls-files -z --exclude-standard '*.md' | xargs -0 mdlynx
 
 ## Mypy
 
-We lint and format Python code with [mypy] in `--strict` mode.
+We lint Python code with [mypy] in `--strict` mode.
 
 [mypy]: https://www.mypy-lang.org/
 
@@ -85,38 +85,38 @@ git ls-files -z --exclude-standard '*.py' | xargs -0 ruff check
 
 We lint shell scripts with [ShellCheck].
 
+[ShellCheck]: https://www.shellcheck.net/
+
 ```sh
 git ls-files -z --exclude-standard '*.sh' | xargs -0 shellcheck
 ```
-
-[ShellCheck] https://www.shellcheck.net/
 
 ## taplo
 
 We format TOML files with [taplo].
 
+[taplo]: https://taplo.tamasfe.dev/
+
 ```bash
 git ls-files -z --exclude-standard '*.toml' | xargs -0 taplo format
 ```
-
-[typos]: https://github.com/crate-ci/typos
 
 ## typos
 
 We run [typos] on Markdown files.
 
+[typos]: https://github.com/crate-ci/typos
+
 ```bash
 git ls-files -z --exclude-standard '*.md' | xargs -0 typos
 ```
-
-[typos]: https://github.com/crate-ci/typos
 
 ## zizmor
 
 We lint our GitHub Actions files with [zizmor].
 
+[zizmor]: https://docs.zizmor.sh/
+
 ```bash
 zizmor .github
 ```
-
-[zizmor]: https://docs.zizmor.sh/
