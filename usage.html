@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html" class="active"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="dev.html"><strong aria-hidden="true">4.</strong> Development</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html" class="active"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="dev/dev.html"><strong aria-hidden="true">4.</strong> Development</a></li><li class="chapter-item expanded "><a href="dev/lint.html"><strong aria-hidden="true">5.</strong> Linting</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -190,7 +190,7 @@ except:
 tree-crasher.</p>
 <pre><code class="language-sh">tree-crasher-rust \
   --interesting-stderr &quot;(?m)^error: internal compiler error:&quot; \
-  corpus \ 
+  corpus \
   -- \
   rustc +nightly --crate-type=lib --emit=mir -Zmir-opt-level=4 @@.rs
 </code></pre>
@@ -208,7 +208,7 @@ tree-crasher.</p>
 </code></pre>
 <h3 id="sql-databases"><a class="header" href="#sql-databases">SQL databases</a></h3>
 <p>Obtain a collection of SQL files (for example, using
-<a href="./scripts/corpora/sql.sh">this script</a>). Then here's how to fuzz DuckDB:</p>
+<a href="../scripts/corpora/sql.sh">this script</a>). Then here's how to fuzz DuckDB:</p>
 <pre><code class="language-sh">tree-crasher-sql --interesting-stderr &quot;INTERNAL Error&quot; corpus/ -- duckdb
 </code></pre>
 <p>Sometimes, you keep running into the same bug and would like to stop reporting

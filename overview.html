@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html" class="active">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="dev.html"><strong aria-hidden="true">4.</strong> Development</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html" class="active">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="dev/dev.html"><strong aria-hidden="true">4.</strong> Development</a></li><li class="chapter-item expanded "><a href="dev/lint.html"><strong aria-hidden="true">5.</strong> Linting</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -153,7 +153,7 @@
 <p>tree-crasher is an easy-to-use grammar-based black-box fuzzer. It parses a
 number of input files using <a href="https://tree-sitter.github.io/tree-sitter/">tree-sitter</a> grammars, and produces
 new files formed by splicing together their ASTs.</p>
-<p>tree-crasher aims to occupy a different niche from more advanced grammar-based 
+<p>tree-crasher aims to occupy a different niche from more advanced grammar-based
 fuzzers like Gramatron, Nautilus, and Grammarinator. Rather than achieve
 maximal coverage and bug-finding through complete, hand-written grammars and
 complex techniques like coverage-based feedback, tree-crasher aims to achieve
@@ -175,19 +175,19 @@ would be to submit a PR to tree-splicer to add it to the README.</p>
 <h2 id="supported-languages"><a class="header" href="#supported-languages">Supported languages</a></h2>
 <p>tree-crasher currently ships pre-built executables for the following languages:</p>
 <ul>
-<li><a href="./crates/tree-crasher-c">C</a></li>
-<li><a href="./crates/tree-crasher-css">CSS</a></li>
-<li><a href="./crates/tree-crasher-javascript">JavaScript</a></li>
-<li><a href="./crates/tree-crasher-regex">Regex</a></li>
-<li><a href="./crates/tree-crasher-rust">Rust</a></li>
-<li><a href="./crates/tree-crasher-sql">SQL</a></li>
-<li><a href="./crates/tree-crasher-typescript">TypeScript</a></li>
+<li><a href="../crates/tree-crasher-c">C</a></li>
+<li><a href="../crates/tree-crasher-css">CSS</a></li>
+<li><a href="../crates/tree-crasher-javascript">JavaScript</a></li>
+<li><a href="../crates/tree-crasher-regex">Regex</a></li>
+<li><a href="../crates/tree-crasher-rust">Rust</a></li>
+<li><a href="../crates/tree-crasher-sql">SQL</a></li>
+<li><a href="../crates/tree-crasher-typescript">TypeScript</a></li>
 </ul>
 <p>Additionally, the following fuzzers can be built from source or installed via
 crates.io:</p>
 <ul>
-<li><a href="./crates/tree-crasher-html">HTML</a></li>
-<li><a href="./crates/tree-crasher-ruby">Ruby</a></li>
+<li><a href="../crates/tree-crasher-html">HTML</a></li>
+<li><a href="../crates/tree-crasher-ruby">Ruby</a></li>
 </ul>
 <p>Languages are very easy to add, so file an issue or a PR if you want a new one!</p>
 <h2 id="how-it-works"><a class="header" href="#how-it-works">How it works</a></h2>

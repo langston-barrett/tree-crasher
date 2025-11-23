@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="dev.html"><strong aria-hidden="true">4.</strong> Development</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="dev/dev.html"><strong aria-hidden="true">4.</strong> Development</a></li><li class="chapter-item expanded "><a href="dev/lint.html"><strong aria-hidden="true">5.</strong> Linting</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -151,7 +151,7 @@
 <p>tree-crasher is an easy-to-use grammar-based black-box fuzzer. It parses a
 number of input files using <a href="https://tree-sitter.github.io/tree-sitter/">tree-sitter</a> grammars, and produces
 new files formed by splicing together their ASTs.</p>
-<p>tree-crasher aims to occupy a different niche from more advanced grammar-based 
+<p>tree-crasher aims to occupy a different niche from more advanced grammar-based
 fuzzers like Gramatron, Nautilus, and Grammarinator. Rather than achieve
 maximal coverage and bug-finding through complete, hand-written grammars and
 complex techniques like coverage-based feedback, tree-crasher aims to achieve
@@ -173,19 +173,19 @@ would be to submit a PR to tree-splicer to add it to the README.</p>
 <h2 id="supported-languages"><a class="header" href="#supported-languages">Supported languages</a></h2>
 <p>tree-crasher currently ships pre-built executables for the following languages:</p>
 <ul>
-<li><a href="./crates/tree-crasher-c">C</a></li>
-<li><a href="./crates/tree-crasher-css">CSS</a></li>
-<li><a href="./crates/tree-crasher-javascript">JavaScript</a></li>
-<li><a href="./crates/tree-crasher-regex">Regex</a></li>
-<li><a href="./crates/tree-crasher-rust">Rust</a></li>
-<li><a href="./crates/tree-crasher-sql">SQL</a></li>
-<li><a href="./crates/tree-crasher-typescript">TypeScript</a></li>
+<li><a href="../crates/tree-crasher-c">C</a></li>
+<li><a href="../crates/tree-crasher-css">CSS</a></li>
+<li><a href="../crates/tree-crasher-javascript">JavaScript</a></li>
+<li><a href="../crates/tree-crasher-regex">Regex</a></li>
+<li><a href="../crates/tree-crasher-rust">Rust</a></li>
+<li><a href="../crates/tree-crasher-sql">SQL</a></li>
+<li><a href="../crates/tree-crasher-typescript">TypeScript</a></li>
 </ul>
 <p>Additionally, the following fuzzers can be built from source or installed via
 crates.io:</p>
 <ul>
-<li><a href="./crates/tree-crasher-html">HTML</a></li>
-<li><a href="./crates/tree-crasher-ruby">Ruby</a></li>
+<li><a href="../crates/tree-crasher-html">HTML</a></li>
+<li><a href="../crates/tree-crasher-ruby">Ruby</a></li>
 </ul>
 <p>Languages are very easy to add, so file an issue or a PR if you want a new one!</p>
 <h2 id="how-it-works"><a class="header" href="#how-it-works">How it works</a></h2>
@@ -215,7 +215,7 @@ install it in Cargo's global binary directory (<code>~/.cargo/bin/</code> by def
 <pre><code class="language-sh">cargo install --git https://github.com/langston-barrett/tree-crasher.git tree-crasher-LANG
 </code></pre>
 <h3 id="from-a-local-checkout"><a class="header" href="#from-a-local-checkout">From a local checkout</a></h3>
-<p>See the <a href="dev.html">developer's guide</a>.</p>
+<p>See the <a href="dev/dev.html">developer's guide</a>.</p>
 <h3 id="uninstalling"><a class="header" href="#uninstalling">Uninstalling</a></h3>
 <p>To uninstall, run <code>cargo uninstall tree-crasher-&lt;LANG&gt;</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="usage"><a class="header" href="#usage">Usage</a></h1>
@@ -259,7 +259,7 @@ except:
 tree-crasher.</p>
 <pre><code class="language-sh">tree-crasher-rust \
   --interesting-stderr &quot;(?m)^error: internal compiler error:&quot; \
-  corpus \ 
+  corpus \
   -- \
   rustc +nightly --crate-type=lib --emit=mir -Zmir-opt-level=4 @@.rs
 </code></pre>
@@ -277,7 +277,7 @@ tree-crasher.</p>
 </code></pre>
 <h3 id="sql-databases"><a class="header" href="#sql-databases">SQL databases</a></h3>
 <p>Obtain a collection of SQL files (for example, using
-<a href="./scripts/corpora/sql.sh">this script</a>). Then here's how to fuzz DuckDB:</p>
+<a href="../scripts/corpora/sql.sh">this script</a>). Then here's how to fuzz DuckDB:</p>
 <pre><code class="language-sh">tree-crasher-sql --interesting-stderr &quot;INTERNAL Error&quot; corpus/ -- duckdb
 </code></pre>
 <p>Sometimes, you keep running into the same bug and would like to stop reporting
@@ -304,7 +304,7 @@ it. For that, you can use <code>--uninteresting-stderr</code>:</p>
 contributions. Please feel free to file and issue or open a pull request.</p>
 <p>You may want to take a look at:</p>
 <ul>
-<li>The <a href="dev.html">developer guide</a></li>
+<li>The <a href="dev/dev.html">developer guide</a></li>
 <li>The <a href="https://github.com/langston-barrett/tree-crasher/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22">issues labeled &quot;good first issue&quot;</a></li>
 <li>The <a href="https://github.com/langston-barrett/tree-crasher/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">issues labeled &quot;help wanted&quot;</a></li>
 </ul>
@@ -333,14 +333,6 @@ with <a href="https://rustup.rs/">rustup</a> like so:</p>
 </code></pre>
 <p>and then run it like this:</p>
 <pre><code class="language-sh">cargo fmt --all
-</code></pre>
-<h2 id="lint"><a class="header" href="#lint">Lint</a></h2>
-<p>All code should pass <a href="https://doc.rust-lang.org/stable/clippy/">Clippy</a>. You can install Clippy with rustup
-like so:</p>
-<pre><code class="language-sh">rustup component add clippy
-</code></pre>
-<p>and then run it like this:</p>
-<pre><code class="language-sh">cargo clippy --workspace -- --deny warnings
 </code></pre>
 <h2 id="release"><a class="header" href="#release">Release</a></h2>
 <ul>
@@ -396,7 +388,7 @@ so:</p>
 <li>It ensures the flags are consistent across all crates in the project</li>
 </ul>
 <p>This flag file rejects all <code>rustc</code> warnings by default, as well as a subset of
-<a href="https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html">allowed-by-default lints</a>. The goal is to balance 
+<a href="https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html">allowed-by-default lints</a>. The goal is to balance
 high-quality, maintainable code with not annoying developers.</p>
 <p>To allow a lint in one spot, use:</p>
 <pre><pre class="playground"><code class="language-rust">
@@ -409,6 +401,61 @@ high-quality, maintainable code with not annoying developers.</p>
 configuration file][cargo-conf]:</p>
 <pre><code class="language-sh">mkdir .cargo
 printf &quot;[build]\nrustflags = [\&quot;@${PWD}/rustc-flags\&quot;]\n&quot; &gt; .cargo/config.toml
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="linting"><a class="header" href="#linting">Linting</a></h1>
+<p>We employ a variety of linting tools. They can be run manually or with <a href="https://ninja-build.org/">Ninja</a>.</p>
+<h2 id="ninja-script"><a class="header" href="#ninja-script">Ninja script</a></h2>
+<p>To run all the linters:</p>
+<pre><code class="language-sh">./scripts/lint/lint.py
+</code></pre>
+<p>As a <a href="https://git-scm.com/docs/githooks#_pre_commit">pre-commit hook</a>:</p>
+<pre><code>cat &lt;&lt;'EOF' &gt; .git/hooks/pre-commit
+#!/usr/bin/env bash
+./scripts/lint/lint.py
+EOF
+chmod +x .git/hooks/pre-commit
+</code></pre>
+<h2 id="clippy"><a class="header" href="#clippy">Clippy</a></h2>
+<p>We lint Rust code with <a href="https://doc.rust-lang.org/stable/clippy/">Clippy</a>.</p>
+<p>You can install Clippy with <a href="https://rustup.rs/"><code>rustup</code></a> like so:</p>
+<pre><code class="language-sh">rustup component add clippy
+</code></pre>
+<p>and run it like this:</p>
+<pre><code class="language-sh">cargo clippy --all-targets -- --deny warnings
+</code></pre>
+<h2 id="generic-scripts"><a class="header" href="#generic-scripts">Generic scripts</a></h2>
+<p>We have a few Python scripts in <code>scripts/lint/</code> that perform one-off checks.
+They generally take some number of paths as arguments. Use their <code>--help</code>
+options to learn more.</p>
+<h2 id="mdlynx"><a class="header" href="#mdlynx">mdlynx</a></h2>
+<p>We run <a href="https://github.com/langston-barrett/mdlynx">mdlynx</a> on our Markdown files to check for broken links.</p>
+<pre><code class="language-bash">git ls-files -z --exclude-standard '*.md' | xargs -0 mdlynx
+</code></pre>
+<h2 id="mypy"><a class="header" href="#mypy">Mypy</a></h2>
+<p>We lint and format Python code with <a href="https://www.mypy-lang.org/">mypy</a> in <code>--strict</code> mode.</p>
+<pre><code class="language-sh">git ls-files -z --exclude-standard '*.py' | xargs -0 mypy --strict
+</code></pre>
+<h2 id="ruff"><a class="header" href="#ruff">Ruff</a></h2>
+<p>We lint and format Python code with <a href="https://docs.astral.sh/ruff/">Ruff</a>.</p>
+<pre><code class="language-sh">git ls-files -z --exclude-standard '*.py' | xargs -0 ruff format
+git ls-files -z --exclude-standard '*.py' | xargs -0 ruff check
+</code></pre>
+<h2 id="shellcheck"><a class="header" href="#shellcheck">ShellCheck</a></h2>
+<p>We lint shell scripts with [ShellCheck].</p>
+<pre><code class="language-sh">git ls-files -z --exclude-standard '*.sh' | xargs -0 shellcheck
+</code></pre>
+<p>[ShellCheck] https://www.shellcheck.net/</p>
+<h2 id="taplo"><a class="header" href="#taplo">taplo</a></h2>
+<p>We format TOML files with [taplo].</p>
+<pre><code class="language-bash">git ls-files -z --exclude-standard '*.toml' | xargs -0 taplo format
+</code></pre>
+<h2 id="typos"><a class="header" href="#typos">typos</a></h2>
+<p>We run <a href="https://github.com/crate-ci/typos">typos</a> on Markdown files.</p>
+<pre><code class="language-bash">git ls-files -z --exclude-standard '*.md' | xargs -0 typos
+</code></pre>
+<h2 id="zizmor"><a class="header" href="#zizmor">zizmor</a></h2>
+<p>We lint our GitHub Actions files with <a href="https://docs.zizmor.sh/">zizmor</a>.</p>
+<pre><code class="language-bash">zizmor .github
 </code></pre>
 
                     </main>

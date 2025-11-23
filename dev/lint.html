@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Development - tree-crasher</title>
+        <title>Linting - tree-crasher</title>
                 
 
         <!-- Custom HTML head -->
@@ -14,21 +14,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-                <link rel="icon" href="favicon.svg">
-                        <link rel="shortcut icon" href="favicon.png">
-                <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-                <link rel="stylesheet" href="css/print.css" media="print">
+                <link rel="icon" href="../favicon.svg">
+                        <link rel="shortcut icon" href="../favicon.png">
+                <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+                <link rel="stylesheet" href="../css/print.css" media="print">
         
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-                <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../fonts/fonts.css">
         
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
         
@@ -36,7 +36,7 @@
     <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="dev.html" class="active"><strong aria-hidden="true">4.</strong> Development</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../overview.html">Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">User documentation</li><li class="chapter-item expanded "><a href="../install.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">3.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Developer documentation</li><li class="chapter-item expanded "><a href="../dev/dev.html"><strong aria-hidden="true">4.</strong> Development</a></li><li class="chapter-item expanded "><a href="../dev/lint.html" class="active"><strong aria-hidden="true">5.</strong> Linting</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -114,13 +114,13 @@
                     <h1 class="menu-title">tree-crasher</h1>
 
                     <div class="right-buttons">
-                                                <a href="print.html" title="Print this book" aria-label="Print this book">
+                                                <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                                                                         <a href="https://github.com/langston-barrett/tree-crasher/tree/main/doc" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                                                                        <a href="https://github.com/langston-barrett/tree-crasher/edit/main/doc/./dev.md" title="Suggest an edit" aria-label="Suggest an edit">
+                                                                        <a href="https://github.com/langston-barrett/tree-crasher/edit/main/doc/./dev/lint.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                         
@@ -149,113 +149,67 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="developers-guide"><a class="header" href="#developers-guide">Developer's guide</a></h1>
-<h2 id="build"><a class="header" href="#build">Build</a></h2>
-<p>To install from source, you'll need to install Rust and <a href="https://doc.rust-lang.org/cargo/">Cargo</a>. Follow
-the instructions on the <a href="https://www.rust-lang.org/tools/install">Rust installation page</a>. Then, get
-the source:</p>
-<pre><code class="language-bash">git clone https://github.com/langston-barrett/tree-crasher
-cd tree-crasher
+                        <h1 id="linting"><a class="header" href="#linting">Linting</a></h1>
+<p>We employ a variety of linting tools. They can be run manually or with <a href="https://ninja-build.org/">Ninja</a>.</p>
+<h2 id="ninja-script"><a class="header" href="#ninja-script">Ninja script</a></h2>
+<p>To run all the linters:</p>
+<pre><code class="language-sh">./scripts/lint/lint.py
 </code></pre>
-<p>Finally, build everything:</p>
-<pre><code class="language-bash">cargo build --release
+<p>As a <a href="https://git-scm.com/docs/githooks#_pre_commit">pre-commit hook</a>:</p>
+<pre><code>cat &lt;&lt;'EOF' &gt; .git/hooks/pre-commit
+#!/usr/bin/env bash
+./scripts/lint/lint.py
+EOF
+chmod +x .git/hooks/pre-commit
 </code></pre>
-<p>You can find binaries in <code>target/release</code>. Run tests with <code>cargo test</code>.</p>
-<h2 id="docs"><a class="header" href="#docs">Docs</a></h2>
-<p>HTML documentation can be built with <a href="https://rust-lang.github.io/mdBook/">mdBook</a>:</p>
-<pre><code class="language-sh">cd doc
-mdbook build
-</code></pre>
-<h2 id="format"><a class="header" href="#format">Format</a></h2>
-<p>All code should be formatted with <a href="https://rust-lang.github.io/rustfmt">rustfmt</a>. You can install rustfmt
-with <a href="https://rustup.rs/">rustup</a> like so:</p>
-<pre><code class="language-sh">rustup component add rustfmt
-</code></pre>
-<p>and then run it like this:</p>
-<pre><code class="language-sh">cargo fmt --all
-</code></pre>
-<h2 id="lint"><a class="header" href="#lint">Lint</a></h2>
-<p>All code should pass <a href="https://doc.rust-lang.org/stable/clippy/">Clippy</a>. You can install Clippy with rustup
-like so:</p>
+<h2 id="clippy"><a class="header" href="#clippy">Clippy</a></h2>
+<p>We lint Rust code with <a href="https://doc.rust-lang.org/stable/clippy/">Clippy</a>.</p>
+<p>You can install Clippy with <a href="https://rustup.rs/"><code>rustup</code></a> like so:</p>
 <pre><code class="language-sh">rustup component add clippy
 </code></pre>
-<p>and then run it like this:</p>
-<pre><code class="language-sh">cargo clippy --workspace -- --deny warnings
+<p>and run it like this:</p>
+<pre><code class="language-sh">cargo clippy --all-targets -- --deny warnings
 </code></pre>
-<h2 id="release"><a class="header" href="#release">Release</a></h2>
-<ul>
-<li>
-<p>Create branch with a name starting with <code>release</code></p>
-</li>
-<li>
-<p>Update <code>CHANGELOG.md</code></p>
-</li>
-<li>
-<p>Update the version numbers in <code>./crates/**/Cargo.toml</code></p>
-<pre><code class="language-sh">find crates/ -type f -name &quot;*.toml&quot; -print0 | \
-  xargs -0 sed -E -i 's/^version = &quot;U.V.W&quot;$/version = &quot;X.Y.Z&quot;/'
+<h2 id="generic-scripts"><a class="header" href="#generic-scripts">Generic scripts</a></h2>
+<p>We have a few Python scripts in <code>scripts/lint/</code> that perform one-off checks.
+They generally take some number of paths as arguments. Use their <code>--help</code>
+options to learn more.</p>
+<h2 id="mdlynx"><a class="header" href="#mdlynx">mdlynx</a></h2>
+<p>We run <a href="https://github.com/langston-barrett/mdlynx">mdlynx</a> on our Markdown files to check for broken links.</p>
+<pre><code class="language-bash">git ls-files -z --exclude-standard '*.md' | xargs -0 mdlynx
 </code></pre>
-</li>
-<li>
-<p>Run <code>cargo build --release</code></p>
-</li>
-<li>
-<p>Commit all changes and push the release branch</p>
-</li>
-<li>
-<p>Check that CI was successful on the release branch</p>
-</li>
-<li>
-<p>Merge the release branch to <code>main</code></p>
-</li>
-<li>
-<p><code>git checkout main &amp;&amp; git pull origin &amp;&amp; git tag -a vX.Y.Z -m vX.Y.Z &amp;&amp; git push --tags</code></p>
-</li>
-<li>
-<p>Verify that the release artifacts work as intended</p>
-</li>
-<li>
-<p>Release the pre-release created by CI</p>
-</li>
-<li>
-<p>Check that the crates were properly uploaded to crates.io</p>
-</li>
-</ul>
-<h2 id="warnings"><a class="header" href="#warnings">Warnings</a></h2>
-<p>Certain warnings are disallowed in the CI build. You can reproduce the behavior
-of the CI build by running <code>cargo check</code>, <code>cargo build</code>, or <code>cargo test</code> like
-so:</p>
-<pre><code class="language-sh">env RUSTFLAGS=&quot;@$PWD/rustc-flags&quot; cargo check
+<h2 id="mypy"><a class="header" href="#mypy">Mypy</a></h2>
+<p>We lint and format Python code with <a href="https://www.mypy-lang.org/">mypy</a> in <code>--strict</code> mode.</p>
+<pre><code class="language-sh">git ls-files -z --exclude-standard '*.py' | xargs -0 mypy --strict
 </code></pre>
-<p>Using a flag file for this purpose achieves several objectives:</p>
-<ul>
-<li>It frictionlessly allows code with warnings during local development</li>
-<li>It makes it easy to reproduce the CI build process locally</li>
-<li>It makes it easy to maintain the list of warnings</li>
-<li>It <a href="https://rust-unofficial.github.io/patterns/anti_patterns/deny-warnings.html#denywarnings">maintains forward-compatibility</a> with future rustc warnings</li>
-<li>It ensures the flags are consistent across all crates in the project</li>
-</ul>
-<p>This flag file rejects all <code>rustc</code> warnings by default, as well as a subset of
-<a href="https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html">allowed-by-default lints</a>. The goal is to balance 
-high-quality, maintainable code with not annoying developers.</p>
-<p>To allow a lint in one spot, use:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[allow(name_of_lint)]
-<span class="boring">}
-</span></code></pre></pre>
-<p>To enable these warnings on a semi-permanent basis, create a [Cargo
-configuration file][cargo-conf]:</p>
-<pre><code class="language-sh">mkdir .cargo
-printf &quot;[build]\nrustflags = [\&quot;@${PWD}/rustc-flags\&quot;]\n&quot; &gt; .cargo/config.toml
+<h2 id="ruff"><a class="header" href="#ruff">Ruff</a></h2>
+<p>We lint and format Python code with <a href="https://docs.astral.sh/ruff/">Ruff</a>.</p>
+<pre><code class="language-sh">git ls-files -z --exclude-standard '*.py' | xargs -0 ruff format
+git ls-files -z --exclude-standard '*.py' | xargs -0 ruff check
+</code></pre>
+<h2 id="shellcheck"><a class="header" href="#shellcheck">ShellCheck</a></h2>
+<p>We lint shell scripts with [ShellCheck].</p>
+<pre><code class="language-sh">git ls-files -z --exclude-standard '*.sh' | xargs -0 shellcheck
+</code></pre>
+<p>[ShellCheck] https://www.shellcheck.net/</p>
+<h2 id="taplo"><a class="header" href="#taplo">taplo</a></h2>
+<p>We format TOML files with [taplo].</p>
+<pre><code class="language-bash">git ls-files -z --exclude-standard '*.toml' | xargs -0 taplo format
+</code></pre>
+<h2 id="typos"><a class="header" href="#typos">typos</a></h2>
+<p>We run <a href="https://github.com/crate-ci/typos">typos</a> on Markdown files.</p>
+<pre><code class="language-bash">git ls-files -z --exclude-standard '*.md' | xargs -0 typos
+</code></pre>
+<h2 id="zizmor"><a class="header" href="#zizmor">zizmor</a></h2>
+<p>We lint our GitHub Actions files with <a href="https://docs.zizmor.sh/">zizmor</a>.</p>
+<pre><code class="language-bash">zizmor .github
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="contributing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="../dev/dev.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
@@ -266,7 +220,7 @@ printf &quot;[build]\nrustflags = [\&quot;@${PWD}/rustc-flags\&quot;]\n&quot; &g
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="contributing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="../dev/dev.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
@@ -282,13 +236,13 @@ printf &quot;[build]\nrustflags = [\&quot;@${PWD}/rustc-flags\&quot;]\n&quot; &g
         </script>
         
         
-                <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+                <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
         
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
         
