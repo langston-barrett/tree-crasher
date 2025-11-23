@@ -51,23 +51,6 @@ cargo fmt --all
 [rustfmt]: https://rust-lang.github.io/rustfmt
 [rustup]: https://rustup.rs/
 
-## Lint
-
-All code should pass [Clippy][clippy]. You can install Clippy with rustup
-like so:
-
-```sh
-rustup component add clippy
-```
-
-and then run it like this:
-
-```sh
-cargo clippy --workspace -- --deny warnings
-```
-
-[clippy]: https://doc.rust-lang.org/stable/clippy/
-
 ## Release
 
 - Create branch with a name starting with `release`
