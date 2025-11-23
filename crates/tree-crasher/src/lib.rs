@@ -160,8 +160,8 @@ fn make_check(
     };
     interesting_exit_codes.extend(128..256);
     Ok(CmdCheck::new(
-        cmd.to_string(),
-        argv.iter().map(|s| s.to_string()).collect(),
+        cmd.clone(),
+        argv.iter().map(|s| (*s).clone()).collect(),
         interesting_exit_codes,
         None,
         stdout_regex,
@@ -356,7 +356,7 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
                     &args,
                     &files,
                     chk.clone(),
-                )
+                );
             });
         }
     });
