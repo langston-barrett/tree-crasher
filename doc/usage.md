@@ -61,7 +61,7 @@ tree-crasher.
 ```sh
 tree-crasher-rust \
   --interesting-stderr "(?m)^error: internal compiler error:" \
-  corpus \ 
+  corpus \
   -- \
   rustc +nightly --crate-type=lib --emit=mir -Zmir-opt-level=4 @@.rs
 ```
@@ -85,7 +85,7 @@ systemd-run --scope -p MemoryMax=16G -p MemorySwapMax=0B --user \
 ### SQL databases
 
 Obtain a collection of SQL files (for example, using
-[this script](./scripts/corpora/sql.sh)). Then here's how to fuzz DuckDB:
+[this script](../scripts/corpora/sql.sh)). Then here's how to fuzz DuckDB:
 
 ```sh
 tree-crasher-sql --interesting-stderr "INTERNAL Error" corpus/ -- duckdb
@@ -119,4 +119,3 @@ tree-crasher-javascript corpus/ -- deno fmt @@.js
 ```sh
 tree-crasher-sql corpus/ -- clickhouse local
 ```
-

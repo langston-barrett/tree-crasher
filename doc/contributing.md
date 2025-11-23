@@ -5,7 +5,7 @@ contributions. Please feel free to file and issue or open a pull request.
 
 You may want to take a look at:
 
-- The [developer guide](dev.md)
+- The [developer guide](dev/dev.md)
 - The [issues labeled "good first issue"][good]
 - The [issues labeled "help wanted"][help]
 

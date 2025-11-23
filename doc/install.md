@@ -41,7 +41,7 @@ cargo install --git https://github.com/langston-barrett/tree-crasher.git tree-cr
 
 ### From a local checkout
 
-See the [developer's guide](dev.md).
+See the [developer's guide](dev/dev.md).
 
 ### Uninstalling
 

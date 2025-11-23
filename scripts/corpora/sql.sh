@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# TODO
+# shellcheck disable=all
+
 set -e
 
 shopt -s globstar

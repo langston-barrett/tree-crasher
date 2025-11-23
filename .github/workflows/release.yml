@@ -1,11 +1,10 @@
 name: release
-
 on:
   push:
     branches:
     - release*
     tags:
-    - 'v*'
+    - v*
 
 env:
   # The NAME makes it easier to copy/paste snippets from other CI configs
@@ -15,10 +14,12 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
+      with:
+        persist-credentials: false
 
     - id: release
-      uses: ncipollo/release-action@v1
+      uses: ncipollo/release-action@v1 # zizmor: ignore[unpinned-uses] TODO
       if: ${{ startsWith(github.ref, 'refs/tags/v') }}
       with:
         artifactErrorsFailBuild: true
@@ -79,7 +80,7 @@ jobs:
           #   target: x86_64-pc-windows-msvc
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
 
     - name: Install rustup
       shell: bash

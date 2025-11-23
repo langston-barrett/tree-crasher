@@ -10,4 +10,5 @@
 
 # Developer documentation
 
-- [Development](./dev.md)
+- [Development](./dev/dev.md)
+- [Linting](./dev/lint.md)

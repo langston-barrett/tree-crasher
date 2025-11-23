@@ -4,7 +4,7 @@ tree-crasher is an easy-to-use grammar-based black-box fuzzer. It parses a
 number of input files using [tree-sitter][tree-sitter] grammars, and produces
 new files formed by splicing together their ASTs.
 
-tree-crasher aims to occupy a different niche from more advanced grammar-based 
+tree-crasher aims to occupy a different niche from more advanced grammar-based
 fuzzers like Gramatron, Nautilus, and Grammarinator. Rather than achieve
 maximal coverage and bug-finding through complete, hand-written grammars and
 complex techniques like coverage-based feedback, tree-crasher aims to achieve
@@ -35,19 +35,19 @@ would be to submit a PR to tree-splicer to add it to the README.
 
 tree-crasher currently ships pre-built executables for the following languages:
 
-- [C](./crates/tree-crasher-c)
-- [CSS](./crates/tree-crasher-css)
-- [JavaScript](./crates/tree-crasher-javascript)
-- [Regex](./crates/tree-crasher-regex)
-- [Rust](./crates/tree-crasher-rust)
-- [SQL](./crates/tree-crasher-sql)
-- [TypeScript](./crates/tree-crasher-typescript)
+- [C](../crates/tree-crasher-c)
+- [CSS](../crates/tree-crasher-css)
+- [JavaScript](../crates/tree-crasher-javascript)
+- [Regex](../crates/tree-crasher-regex)
+- [Rust](../crates/tree-crasher-rust)
+- [SQL](../crates/tree-crasher-sql)
+- [TypeScript](../crates/tree-crasher-typescript)
 
 Additionally, the following fuzzers can be built from source or installed via
 crates.io:
 
-- [HTML](./crates/tree-crasher-html)
-- [Ruby](./crates/tree-crasher-ruby)
+- [HTML](../crates/tree-crasher-html)
+- [Ruby](../crates/tree-crasher-ruby)
 
 Languages are very easy to add, so file an issue or a PR if you want a new one!
 
