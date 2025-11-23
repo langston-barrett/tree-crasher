@@ -10,6 +10,9 @@ readme = "../../README.md"
 homepage = "https://github.com/langston-barrett/tree-crasher"
 repository = "https://github.com/langston-barrett/tree-crasher"
 
+[lints]
+workspace = true
+
 [dependencies]
 anyhow = { version = "1", optional = false }
 clap-verbosity-flag = { version = "3", optional = false }

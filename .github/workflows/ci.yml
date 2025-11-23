@@ -96,7 +96,7 @@ jobs:
       with:
         persist-credentials: false
     - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
-    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run
-    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test
-    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run --features=radamsa
-    - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --features=radamsa
+    - run: cargo test --locked --no-run
+    - run: cargo test
+    - run: cargo test --locked --no-run --features=radamsa
+    - run: cargo test --features=radamsa
