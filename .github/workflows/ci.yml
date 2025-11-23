@@ -15,14 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Cancel previous run
-      uses: styfle/cancel-workflow-action@0.12.1
+      uses: styfle/cancel-workflow-action@0.12.1 # zizmor: ignore[unpinned-uses] TODO
       with:
         access_token: ${{ github.token }}
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
+      with:
+        persist-credentials: false
 
     - name: Setup mdBook
-      uses: peaceiris/actions-mdbook@v2
+      uses: peaceiris/actions-mdbook@v2 # zizmor: ignore[unpinned-uses] TODO
       with:
         mdbook-version: '0.4.10'
 
@@ -32,7 +34,7 @@ jobs:
         mdbook build
 
     - name: Push docs
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@v4 # zizmor: ignore[unpinned-uses] TODO
       if: ${{ github.ref == 'refs/heads/main' }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +46,7 @@ jobs:
         tar -cvf doc.tar.gz doc/book/*
 
     - name: Upload docs
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v5 # zizmor: ignore[unpinned-uses] TODO
       if: github.repository == 'langston-barrett/${{ env.NAME }}'
       with:
         name: "${{ env.NAME }}-docs"
@@ -54,26 +56,25 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-    - name: Format
-      run: cargo fmt && git diff --exit-code
-    - name: Deps
-      run: |
-        rustup update
-        rustup component add clippy
-    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
-    - name: Lint
-      run: cargo clippy -- --deny warnings
+    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
+      with:
+        persist-credentials: false
+    - run: rustup component add clippy
+    - uses: langston-barrett/gha/.github/actions/install-linters@9137259cab1d86dbeae3bde37898a2dfe6a12130
+    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
+    - run: ./scripts/lint/lint.py
 
   static:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
+      with:
+        persist-credentials: false
     - name: Deps
       run: |
         sudo apt-get install -y musl-tools
         rustup target add x86_64-unknown-linux-musl
-    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
+    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
     - run: |
         cargo build \
           --bin ${NAME}-c \
@@ -91,8 +92,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
+    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
+      with:
+        persist-credentials: false
+    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test
     - run: env RUSTFLAGS="@$PWD/rustc-flags" cargo test --locked --no-run --features=radamsa

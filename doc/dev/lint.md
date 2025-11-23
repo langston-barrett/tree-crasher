@@ -1,0 +1,122 @@
+# Linting
+
+We employ a variety of linting tools. They can be run manually or with [Ninja].
+
+[Ninja]: https://ninja-build.org/
+
+## Ninja script
+
+To run all the linters:
+
+```sh
+./scripts/lint/lint.py
+```
+
+As a [pre-commit hook]:
+
+[pre-commit hook]: https://git-scm.com/docs/githooks#_pre_commit
+
+```
+cat <<'EOF' > .git/hooks/pre-commit
+#!/usr/bin/env bash
+./scripts/lint/lint.py
+EOF
+chmod +x .git/hooks/pre-commit
+```
+
+## Clippy
+
+We lint Rust code with [Clippy][clippy].
+
+[clippy]: https://doc.rust-lang.org/stable/clippy/
+
+You can install Clippy with [`rustup`] like so:
+
+[`rustup`]: https://rustup.rs/
+
+```sh
+rustup component add clippy
+```
+
+and run it like this:
+
+```sh
+cargo clippy --all-targets -- --deny warnings
+```
+
+## Generic scripts
+
+We have a few Python scripts in `scripts/lint/` that perform one-off checks.
+They generally take some number of paths as arguments. Use their `--help`
+options to learn more.
+
+## mdlynx
+
+We run [mdlynx] on our Markdown files to check for broken links.
+
+[mdlynx]: https://github.com/langston-barrett/mdlynx
+
+```bash
+git ls-files -z --exclude-standard '*.md' | xargs -0 mdlynx
+```
+
+## Mypy
+
+We lint and format Python code with [mypy] in `--strict` mode.
+
+[mypy]: https://www.mypy-lang.org/
+
+```sh
+git ls-files -z --exclude-standard '*.py' | xargs -0 mypy --strict
+```
+
+## Ruff
+
+We lint and format Python code with [Ruff].
+
+[Ruff]: https://docs.astral.sh/ruff/
+
+```sh
+git ls-files -z --exclude-standard '*.py' | xargs -0 ruff format
+git ls-files -z --exclude-standard '*.py' | xargs -0 ruff check
+```
+
+## ShellCheck
+
+We lint shell scripts with [ShellCheck].
+
+```sh
+git ls-files -z --exclude-standard '*.sh' | xargs -0 shellcheck
+```
+
+[ShellCheck] https://www.shellcheck.net/
+
+## taplo
+
+We format TOML files with [taplo].
+
+```bash
+git ls-files -z --exclude-standard '*.toml' | xargs -0 taplo format
+```
+
+[typos]: https://github.com/crate-ci/typos
+
+## typos
+
+We run [typos] on Markdown files.
+
+```bash
+git ls-files -z --exclude-standard '*.md' | xargs -0 typos
+```
+
+[typos]: https://github.com/crate-ci/typos
+
+## zizmor
+
+We lint our GitHub Actions files with [zizmor].
+
+```bash
+zizmor .github
+```
+
+[zizmor]: https://docs.zizmor.sh/

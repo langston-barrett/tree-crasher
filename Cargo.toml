@@ -1,18 +1,18 @@
 [workspace]
 members = [
-    "crates/tree-crasher",
-    "crates/tree-crasher-c",
-    "crates/tree-crasher-css",
-    "crates/tree-crasher-html",
-    "crates/tree-crasher-javascript",
-    "crates/tree-crasher-nix",
-    "crates/tree-crasher-python",
-    "crates/tree-crasher-regex",
-    "crates/tree-crasher-ruby",
-    "crates/tree-crasher-rust",
-    "crates/tree-crasher-sql",
-    "crates/tree-crasher-typescript",
-    "crates/tree-crasher-solidity",
+  "crates/tree-crasher",
+  "crates/tree-crasher-c",
+  "crates/tree-crasher-css",
+  "crates/tree-crasher-html",
+  "crates/tree-crasher-javascript",
+  "crates/tree-crasher-nix",
+  "crates/tree-crasher-python",
+  "crates/tree-crasher-regex",
+  "crates/tree-crasher-ruby",
+  "crates/tree-crasher-rust",
+  "crates/tree-crasher-sql",
+  "crates/tree-crasher-typescript",
+  "crates/tree-crasher-solidity",
 ]
 
 # https://github.com/mstange/samply#turn-on-debug-info-for-full-stacks

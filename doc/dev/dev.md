@@ -107,7 +107,7 @@ Using a flag file for this purpose achieves several objectives:
 - It ensures the flags are consistent across all crates in the project
 
 This flag file rejects all `rustc` warnings by default, as well as a subset of
-[allowed-by-default lints][allowed-by-default]. The goal is to balance 
+[allowed-by-default lints][allowed-by-default]. The goal is to balance
 high-quality, maintainable code with not annoying developers.
 
 To allow a lint in one spot, use:

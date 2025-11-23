@@ -4,7 +4,7 @@ tree-crasher is an easy-to-use grammar-based black-box fuzzer. It parses a
 number of input files using [tree-sitter][tree-sitter] grammars, and produces
 new files formed by splicing together their ASTs.
 
-tree-crasher aims to occupy a different niche from more advanced grammar-based 
+tree-crasher aims to occupy a different niche from more advanced grammar-based
 fuzzers like Gramatron, Nautilus, and Grammarinator. Rather than achieve
 maximal coverage and bug-finding through complete, hand-written grammars and
 complex techniques like coverage-based feedback, tree-crasher aims to achieve
@@ -67,7 +67,7 @@ tree-crasher.
 ```sh
 tree-crasher-rust \
   --interesting-stderr "(?m)^error: internal compiler error:" \
-  corpus \ 
+  corpus \
   -- \
   rustc +nightly --crate-type=lib --emit=mir -Zmir-opt-level=4 @@.rs
 ```
