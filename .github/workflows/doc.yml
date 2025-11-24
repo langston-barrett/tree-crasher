@@ -14,7 +14,6 @@ concurrency:
 jobs:
   docs:
     uses: langston-barrett/gha/.github/workflows/mdbook-pages.yml@8453c38f50561612c0baddb16d1438950c4d7473
-    timeout-minutes: 10
     permissions:
       contents: read
       id-token: write
