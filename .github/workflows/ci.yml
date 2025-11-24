@@ -1,14 +1,12 @@
 name: CI
-
 on:
   push:
     branches:
     - main
   pull_request:
-
-env:
-  # The NAME makes it easier to copy/paste snippets from other CI configs
-  NAME: tree-crasher
+    # Don't run on documentation-only changes
+    paths-ignore: ["**.md"]
+  workflow_dispatch:
 
 jobs:
   lint:
