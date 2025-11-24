@@ -54,7 +54,7 @@
 
 from argparse import ArgumentParser
 from dataclasses import dataclass
-from os import environ
+from os import environ, execvp
 from pathlib import Path
 from subprocess import run
 from textwrap import dedent
@@ -70,7 +70,11 @@ class NinjaScripts:
     format: NinjaScript
 
 
-def build(ninja: NinjaScript, out: str, rule: str, ins: str, /) -> NinjaScript:
+def build(
+    ninja: NinjaScript, out: str, rule: str, ins: str, /, skip: set[str] | None = None
+) -> NinjaScript:
+    if skip is not None and rule in skip:
+        return ninja
     assert " " not in out
     ninja = cast(NinjaScript, ninja + f"build $builddir/{out}: {rule} {ins}\n")
     return ninja
@@ -80,7 +84,11 @@ def rules(ninja: NinjaScript, rule_def: str) -> NinjaScript:
     return cast(NinjaScript, ninja + dedent(rule_def))
 
 
-def lint(ninja: NinjaScript, rule: str, ins: str, /) -> NinjaScript:
+def lint(
+    ninja: NinjaScript, rule: str, ins: str, /, skip: set[str] | None = None
+) -> NinjaScript:
+    if skip is not None and rule in skip:
+        return ninja
     # replace directory separators `/` with hyphens `-`
     slug = ins.replace("/", "-") + "." + rule
     return build(ninja, slug, rule, ins)
@@ -100,25 +108,29 @@ def ls_files(pats: list[str]) -> list[str]:
     return stdout.decode("utf-8").split("\n")
 
 
-def txt_lint(ninja: NinjaScript, path: str) -> NinjaScript:
+def txt_lint(
+    ninja: NinjaScript, path: str, skip: set[str] | None = None
+) -> NinjaScript:
     if environ.get("CI") is None:
         # requires rg
-        ninja = lint(ninja, "bom", path)
-        ninja = lint(ninja, "crlf", path)
-    ninja = lint(ninja, "merge", path)
-    ninja = lint(ninja, "ws", path)
+        ninja = lint(ninja, "bom", path, skip=skip)
+        ninja = lint(ninja, "crlf", path, skip=skip)
+    ninja = lint(ninja, "merge", path, skip=skip)
+    ninja = lint(ninja, "ws", path, skip=skip)
     return ninja
 
 
-def txt_format(ninja: NinjaScript, path: str) -> NinjaScript:
-    ninja = lint(ninja, "ws-fix", path)
+def txt_format(
+    ninja: NinjaScript, path: str, skip: set[str] | None = None
+) -> NinjaScript:
+    ninja = lint(ninja, "ws-fix", path, skip=skip)
     return ninja
 
 
 # ---------------------------------------------------------
 
 
-def bash(scripts: NinjaScripts) -> NinjaScripts:
+def bash(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     bash = ls_files(["*.bash"])
     if bash == []:
         return scripts
@@ -136,14 +148,14 @@ def bash(scripts: NinjaScripts) -> NinjaScripts:
     """,
     )
     for path in bash:
-        scripts.lint = lint(scripts.lint, "bash-n", path)
-        scripts.lint = lint(scripts.lint, "bash-sc", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "bash-n", path, skip=skip)
+        scripts.lint = lint(scripts.lint, "bash-sc", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def _gha(scripts: NinjaScripts) -> NinjaScripts:
+def gha(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     gha = ls_files([".github/**/*.yml"])
     if gha == []:
         return scripts
@@ -168,14 +180,14 @@ def _gha(scripts: NinjaScripts) -> NinjaScripts:
         if path.endswith("workflows/dependabot.yml"):
             # https://github.com/zizmorcore/zizmor/issues/1341
             continue
-        scripts.lint = lint(scripts.lint, "zizmor", path)
-        scripts.fix = lint(scripts.fix, "zizmor-fix", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "zizmor", path, skip=skip)
+        scripts.fix = lint(scripts.fix, "zizmor-fix", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def json(scripts: NinjaScripts) -> NinjaScripts:
+def json(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     json = ls_files(["*.json"])
     if json == []:
         return scripts
@@ -189,13 +201,13 @@ def json(scripts: NinjaScripts) -> NinjaScripts:
     """,
     )
     for path in json:
-        scripts.lint = lint(scripts.lint, "jq", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "jq", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def make(scripts: NinjaScripts) -> NinjaScripts:
+def make(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     make = ls_files(["**/Makefile"])
     if make == []:
         return scripts
@@ -209,13 +221,13 @@ def make(scripts: NinjaScripts) -> NinjaScripts:
     """,
     )
     for path in make:
-        scripts.lint = lint(scripts.lint, "make-n", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "make-n", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def md(scripts: NinjaScripts) -> NinjaScripts:
+def md(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     md = ls_files(["*.md"])
     if md == []:
         return scripts
@@ -241,26 +253,26 @@ def md(scripts: NinjaScripts) -> NinjaScripts:
     """,
     )
     for path in md:
-        scripts.lint = lint(scripts.lint, "mdlynx", path)
-        scripts.lint = lint(scripts.lint, "typos", path)
-        scripts.fix = lint(scripts.fix, "typos-fix", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "mdlynx", path, skip=skip)
+        scripts.lint = lint(scripts.lint, "typos", path, skip=skip)
+        scripts.fix = lint(scripts.fix, "typos-fix", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def nix(scripts: NinjaScripts) -> NinjaScripts:
+def nix(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     nix = ls_files(["*.nix"])
     if nix == []:
         return scripts
 
     for path in nix:
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def py(scripts: NinjaScripts) -> NinjaScripts:
+def py(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     py = ls_files(["*.py"])
     if py == []:
         return scripts
@@ -304,18 +316,18 @@ def py(scripts: NinjaScripts) -> NinjaScripts:
     for path in py:
         if Path(path).read_text().startswith("# noqa"):
             continue
-        scripts.lint = lint(scripts.lint, "mypy", path)
-        scripts.lint = lint(scripts.lint, "ruff-check", path)
-        scripts.lint = lint(scripts.lint, "ruff-fmt-check", path)
-        scripts.lint = lint(scripts.lint, "py", path)
-        scripts.fix = lint(scripts.fix, "ruff-check-fix", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = lint(scripts.format, "ruff-fmt", path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "mypy", path, skip=skip)
+        scripts.lint = lint(scripts.lint, "ruff-check", path, skip=skip)
+        scripts.lint = lint(scripts.lint, "ruff-fmt-check", path, skip=skip)
+        scripts.lint = lint(scripts.lint, "py", path, skip=skip)
+        scripts.fix = lint(scripts.fix, "ruff-check-fix", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = lint(scripts.format, "ruff-fmt", path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def rs(scripts: NinjaScripts) -> NinjaScripts:
+def rs(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     cargo = ls_files(["**/Cargo.toml"])
     rs = ls_files(["*.rs"])
     if rs == []:
@@ -329,11 +341,11 @@ def rs(scripts: NinjaScripts) -> NinjaScripts:
     scripts.lint = rules(
         scripts.lint,
         f"""
-    rule cargo-clippy
+    rule clippy
       command = {cd}cargo clippy --all-targets --quiet -- --deny warnings && touch {root}/$out
       description = cargo clippy
 
-    rule cargo-fmt-check
+    rule rustfmt-check
       command = {cd}cargo fmt --check && touch {root}/$out
       description = cargo fmt --check
     """,
@@ -341,7 +353,7 @@ def rs(scripts: NinjaScripts) -> NinjaScripts:
     scripts.fix = rules(
         scripts.fix,
         f"""
-    rule cargo-clippy-fix
+    rule clippy-fix
       command = {cd}cargo clippy  --all-targets --allow-dirty --fix --quiet -- --deny warnings && touch {root}/$out
       description = cargo clippy --fix
     """,
@@ -349,28 +361,30 @@ def rs(scripts: NinjaScripts) -> NinjaScripts:
     scripts.format = rules(
         scripts.format,
         f"""
-    rule cargo-fmt
+    rule rustfmt
       command = {cd}cargo fmt && touch {root}/$out
       description = cargo fmt
     """,
     )
     scripts.lint = build(
-        scripts.lint, "cargo-clippy", "cargo-clippy", " ".join(cargo + rs)
+        scripts.lint, "clippy", "clippy", " ".join(cargo + rs), skip=skip
     )
     scripts.lint = build(
-        scripts.lint, "cargo-fmt-check", "cargo-fmt-check", " ".join(rs)
+        scripts.lint, "rustfmt-check", "rustfmt-check", " ".join(rs), skip=skip
     )
-    scripts.format = build(scripts.format, "cargo-fmt", "cargo-fmt", " ".join(rs))
+    scripts.format = build(
+        scripts.format, "rustfmt", "rustfmt", " ".join(rs), skip=skip
+    )
     scripts.fix = build(
-        scripts.fix, "cargo-clippy-fix", "cargo-clippy-fix", " ".join(cargo + rs)
+        scripts.fix, "clippy-fix", "clippy-fix", " ".join(cargo + rs), skip=skip
     )
     for path in rs:
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def sh(scripts: NinjaScripts) -> NinjaScripts:
+def sh(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     sh = ls_files(["*.sh", "files/scripts/bin/*"])
     if sh == []:
         return scripts
@@ -384,13 +398,13 @@ def sh(scripts: NinjaScripts) -> NinjaScripts:
     """,
     )
     for path in sh:
-        scripts.lint = lint(scripts.lint, "sc", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "sc", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def toml(scripts: NinjaScripts) -> NinjaScripts:
+def toml(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     toml = ls_files(["*.toml"])
     if toml == []:
         return scripts
@@ -399,7 +413,7 @@ def toml(scripts: NinjaScripts) -> NinjaScripts:
         scripts.lint,
         """
     rule taplo-format-check
-      command = taplo format --check --diff | grep -v 'found files' -- $in && touch $out
+      command = taplo format --check --diff -- $in && touch $out
       description = taplo format --check
     """,
     )
@@ -412,14 +426,14 @@ def toml(scripts: NinjaScripts) -> NinjaScripts:
     """,
     )
     for path in toml:
-        scripts.lint = lint(scripts.lint, "taplo-format-check", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = lint(scripts.format, "taplo-format", path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "taplo-format-check", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = lint(scripts.format, "taplo-format", path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
-def zsh(scripts: NinjaScripts) -> NinjaScripts:
+def zsh(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     zsh = ls_files(["*.zsh"])
     if zsh == []:
         return scripts
@@ -437,10 +451,10 @@ def zsh(scripts: NinjaScripts) -> NinjaScripts:
     """,
     )
     for path in zsh:
-        scripts.lint = lint(scripts.lint, "zsh-n", path)
-        scripts.lint = lint(scripts.lint, "zsh-sc", path)
-        scripts.lint = txt_lint(scripts.lint, path)
-        scripts.format = txt_format(scripts.format, path)
+        scripts.lint = lint(scripts.lint, "zsh-n", path, skip=skip)
+        scripts.lint = lint(scripts.lint, "zsh-sc", path, skip=skip)
+        scripts.lint = txt_lint(scripts.lint, path, skip=skip)
+        scripts.format = txt_format(scripts.format, path, skip=skip)
     return scripts
 
 
@@ -466,7 +480,7 @@ ALL_PATS = [
 ]
 
 
-def xref(scripts: NinjaScripts) -> NinjaScripts:
+def xref(scripts: NinjaScripts, skip: set[str] | None = None) -> NinjaScripts:
     files = ls_files(ALL_PATS)
     if files == []:
         return scripts
@@ -479,17 +493,19 @@ def xref(scripts: NinjaScripts) -> NinjaScripts:
       description = xref
     """,
     )
-    scripts.lint = build(scripts.lint, "xref", "xref", " ".join(files))
+    scripts.lint = build(scripts.lint, "xref", "xref", " ".join(files), skip=skip)
     return scripts
 
 
-def ok(ninja: NinjaScript) -> None:
+def ok(ninja: NinjaScript, skip: set[str] | None = None) -> None:
     if environ.get("CI") is not None:
         return
     rule_names = [
         line.split()[1] for line in ninja.splitlines() if line.startswith("rule")
     ]
     for rule in rule_names:
+        if skip is not None and rule in skip:
+            continue
         ok = False
         for line in ninja.splitlines():
             if line.startswith("build") and f": {rule}" in line:
@@ -498,7 +514,7 @@ def ok(ninja: NinjaScript) -> None:
         assert ok, f"{rule} not in any `build` lines"
 
 
-def go(do_format: bool, do_fix: bool) -> None:
+def go(do_format: bool, do_fix: bool, skip: set[str] | None = None) -> None:
     lint = NinjaScript(
         dedent(r"""
     builddir=.out/
@@ -535,33 +551,40 @@ def go(do_format: bool, do_fix: bool) -> None:
     """)
     )
     scripts = NinjaScripts(lint, fix, format)
-    scripts = bash(scripts)
-    # TODO
-    # scripts = gha(scripts)
-    scripts = json(scripts)
-    scripts = md(scripts)
-    scripts = make(scripts)
-    scripts = nix(scripts)
-    scripts = py(scripts)
-    scripts = rs(scripts)
-    scripts = sh(scripts)
-    scripts = toml(scripts)
-    scripts = xref(scripts)
-    ok(scripts.lint)
-    ok(scripts.fix)
-    ok(scripts.format)
+    scripts = bash(scripts, skip=skip)
+    scripts = gha(scripts, skip=skip)
+    scripts = json(scripts, skip=skip)
+    scripts = md(scripts, skip=skip)
+    scripts = make(scripts, skip=skip)
+    scripts = nix(scripts, skip=skip)
+    scripts = py(scripts, skip=skip)
+    scripts = rs(scripts, skip=skip)
+    scripts = sh(scripts, skip=skip)
+    scripts = toml(scripts, skip=skip)
+    scripts = xref(scripts, skip=skip)
+    ok(scripts.lint, skip=skip)
+    ok(scripts.fix, skip=skip)
+    ok(scripts.format, skip=skip)
     Path("lint.ninja").write_text(scripts.lint)
     Path("fix.ninja").write_text(scripts.fix)
     Path("format.ninja").write_text(scripts.format)
     if do_fix:
-        run(["ninja", "-f", "fix.ninja"], check=True)
+        execvp("ninja", ["ninja", "-f", "fix.ninja"])
     if do_format:
-        run(["ninja", "-f", "format.ninja"], check=True)
-    run(["ninja", "-f", "lint.ninja"], check=True)
+        execvp("ninja", ["ninja", "-f", "format.ninja"])
+    execvp("ninja", ["ninja", "-f", "lint.ninja"])
 
 
 parser = ArgumentParser(description=__doc__)
-parser.add_argument("--fix", action="store_true")
-parser.add_argument("--format", action="store_true")
+group = parser.add_mutually_exclusive_group()
+group.add_argument("--fix", action="store_true")
+group.add_argument("--format", action="store_true")
+parser.add_argument(
+    "--skip",
+    action="append",
+    default=[],
+    help="skip linter (can be specified multiple times)",
+)
 args = parser.parse_args()
-go(args.format, args.fix)
+skip_set = set(args.skip) if args.skip else None
+go(args.format, args.fix, skip=skip_set)

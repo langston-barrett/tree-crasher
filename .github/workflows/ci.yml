@@ -9,25 +9,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
-      with:
-        persist-credentials: false
-    - run: rustup component add clippy
-    - uses: langston-barrett/gha/.github/actions/install-linters@9137259cab1d86dbeae3bde37898a2dfe6a12130
-    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
-    - run: ./scripts/lint/lint.py
-
   test:
     runs-on: ubuntu-latest
+    env:
+      RUSTDOCFLAGS: --deny warnings
+      RUSTFLAGS: --deny warnings
     steps:
+    - run: rustup component add clippy
     - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
       with:
         persist-credentials: false
     - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
-    - run: cargo test --locked --no-run
-    - run: cargo test
-    - run: cargo test --locked --no-run --features=radamsa
-    - run: cargo test --features=radamsa
+    - run: cargo fetch
+    - run: cargo clippy --all-targets --frozen -- --deny warnings
+    - run: cargo build --all-targets --frozen
+    - run: cargo test --frozen
+    - run: cargo doc --examples --frozen --no-deps
+    - run: cargo build --all-targets --locked --features=radamsa
+    - run: cargo test --locked --features=radamsa
