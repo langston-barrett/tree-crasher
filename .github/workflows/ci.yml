@@ -22,31 +22,6 @@ jobs:
     - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
     - run: ./scripts/lint/lint.py
 
-  static:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
-      with:
-        persist-credentials: false
-    - name: Deps
-      run: |
-        sudo apt-get install -y musl-tools
-        rustup target add x86_64-unknown-linux-musl
-    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
-    - run: |
-        cargo build \
-          --bin ${NAME}-c \
-          --bin ${NAME}-css \
-          --bin ${NAME}-javascript \
-          --bin ${NAME}-regex \
-          --bin ${NAME}-rust \
-          --bin ${NAME}-solidity \
-          --bin ${NAME}-sql \
-          --bin ${NAME}-typescript \
-          --locked \
-          --release \
-          --target=x86_64-unknown-linux-musl
-
   test:
     runs-on: ubuntu-latest
     steps:
