@@ -1,6 +1,7 @@
-# Linting
+# Linting and formatting
 
-We employ a variety of linting tools. They can be run manually or with [Ninja].
+We employ a variety of linting and formatting tools. They can be run manually or
+with [Ninja].
 
 [Ninja]: https://ninja-build.org/
 
@@ -10,6 +11,12 @@ To run all the linters:
 
 ```sh
 ./scripts/lint/lint.py
+```
+
+To run all the formatters:
+
+```sh
+./scripts/lint/lint.py --format
 ```
 
 As a [pre-commit hook]:
@@ -79,6 +86,26 @@ We lint and format Python code with [Ruff].
 ```sh
 git ls-files -z --exclude-standard '*.py' | xargs -0 ruff format
 git ls-files -z --exclude-standard '*.py' | xargs -0 ruff check
+```
+
+## `rustfmt`
+
+We format Rust code with [`rustfmt`].
+
+[rustfmt]: https://rust-lang.github.io/rustfmt
+
+You can install rustfmt with [`rustup`] like so:
+
+[rustup]: https://rustup.rs/
+
+```sh
+rustup component add rustfmt
+```
+
+and then run it like this:
+
+```sh
+cargo fmt --all
 ```
 
 ## ShellCheck
