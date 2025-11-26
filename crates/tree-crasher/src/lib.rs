@@ -116,7 +116,7 @@ fn read_file(file: &PathBuf) -> Result<String> {
     fs::read_to_string(file).with_context(|| format!("Failed to read file {}", file.display()))
 }
 
-fn parse(language: Language, code: &str) -> Result<Tree> {
+fn parse(language: &Language, code: &str) -> Result<Tree> {
     let mut parser = tree_sitter::Parser::new();
     parser
         .set_language(language)
@@ -177,7 +177,7 @@ fn make_check(
 const BATCH: usize = 100_000; // not all materialized at once
 
 fn check(
-    language: Language,
+    language: &Language,
     node_types: &treereduce::NodeTypes,
     chk: &CmdCheck,
     inp: &[u8],
@@ -208,7 +208,7 @@ fn check(
         fs::write(format!("tree-crasher-{i}.stderr"), stderr).unwrap();
         let tree = parse(language, &String::from_utf8_lossy(inp)).unwrap();
         match treereduce::treereduce_multi_pass(
-            language,
+            language.clone(),
             node_types,
             treereduce::Original::new(tree, inp.to_vec()),
             &treereduce::Config {
@@ -267,14 +267,14 @@ fn job(
             };
             assert!(out_len <= MAX_SIZE);
             mutant.truncate(out_len);
-            check(language, node_types1, &chk, &mutant);
+            check(&language, node_types1, &chk, &mutant);
         }
     }
     loop {
         let config = Config {
             chaos: args.chaos,
             deletions: args.deletions,
-            language,
+            language: language.clone(),
             // intra_splices: 10,
             inter_splices: args.mutations,
             node_types: node_types2.clone(),
@@ -284,16 +284,20 @@ fn job(
         };
         let start = Instant::now();
         let mut execs = 0;
-        for (i, out) in Splicer::new(config, files).enumerate() {
-            if i == BATCH {
-                break;
+        if let Some(splicer) = Splicer::new(config, files) {
+            for (i, out) in splicer.enumerate() {
+                if i == BATCH {
+                    break;
+                }
+                let _code = check(&language, node_types1, &chk, &out);
+                execs += 1;
+                let secs = start.elapsed().as_secs();
+                if secs > 0 && execs % 10_000 == 0 {
+                    println!("execs/sec: {}", execs / secs);
+                }
             }
-            let _code = check(language, node_types1, &chk, &out);
-            execs += 1;
-            let secs = start.elapsed().as_secs();
-            if execs % 10_000 == 0 {
-                println!("execs/sec: {}", execs / secs);
-            }
+        } else {
+            println!("error: no splices!"); // TODO: improve message
         }
     }
 }
@@ -315,7 +319,7 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
         let entry = entry?;
         let path = entry.path();
         if let Ok(s) = read_file(&path) {
-            let tree = parse(language, &s)?;
+            let tree = parse(&language, &s)?;
             files.insert(String::from(path.to_string_lossy()), (s.into_bytes(), tree));
         }
     }
@@ -348,15 +352,14 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
     };
     std::thread::scope(|s| {
         for _ in 0..jobs {
-            s.spawn(|| {
-                job(
-                    language,
-                    &node_types1,
-                    &node_types2,
-                    &args,
-                    &files,
-                    chk.clone(),
-                );
+            let language = language.clone();
+            let chk = chk.clone();
+            let node_types1 = &node_types1;
+            let node_types2 = &node_types2;
+            let args = &args;
+            let files = &files;
+            s.spawn(move || {
+                job(language, node_types1, node_types2, args, files, chk);
             });
         }
     });
