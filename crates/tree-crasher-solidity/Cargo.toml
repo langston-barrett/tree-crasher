@@ -16,4 +16,4 @@ workspace = true
 [dependencies]
 anyhow = "1"
 tree-crasher = { version = "0.4.0", path = "../tree-crasher" }
-tree-sitter-solidity = "1.2"
+tree-sitter-solidity = "1.2.13"
