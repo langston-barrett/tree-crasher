@@ -1,19 +1,20 @@
 [package]
 name = "tree-crasher-sql"
-version = "0.4.0"
-edition = "2021"
+version = "0.5.0"
 description = "Easy-to-use grammar-based black-box fuzzer"
 keywords = ["black-box", "fuzzer", "grammar-based"]
-authors = ["Langston Barrett <langston.barrett@gmail.com>"]
-license = "MIT"
 readme = "../../README.md"
-homepage = "https://github.com/langston-barrett/tree-crasher"
-repository = "https://github.com/langston-barrett/tree-crasher"
+
+authors.workspace = true
+license.workspace = true
+edition.workspace = true
+homepage.workspace = true
+repository.workspace = true
 
 [lints]
 workspace = true
 
 [dependencies]
 anyhow = "1"
-tree-crasher = { version = "0.4.0", path = "../tree-crasher" }
+tree-crasher = { workspace = true }
 tree-sitter-sequel = "0.3.11"
