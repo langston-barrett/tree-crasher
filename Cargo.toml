@@ -15,6 +15,16 @@ members = [
   "crates/tree-crasher-solidity",
 ]
 
+[workspace.package]
+authors = ["Langston Barrett <langston.barrett@gmail.com>"]
+license = "MIT"
+edition = "2024"
+homepage = "https://github.com/langston-barrett/tree-crasher"
+repository = "https://github.com/langston-barrett/tree-crasher"
+
+[workspace.dependencies]
+tree-crasher = { version = "0.5.0", path = "./crates/tree-crasher" }
+
 # https://github.com/mstange/samply#turn-on-debug-info-for-full-stacks
 [profile.profiling]
 inherits = "release"
