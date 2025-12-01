@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v6 # zizmor: ignore[unpinned-uses] TODO
       with:
         persist-credentials: false
-    - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1  # 2.8.1
+    - uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5  # 2.8.2
     - run: cargo fetch
     - run: cargo clippy --all-targets --frozen -- --deny warnings
     - run: cargo build --all-targets --frozen
