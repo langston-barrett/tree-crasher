@@ -309,8 +309,8 @@ fn job(
                 let _code = check(&language, node_types1, &chk, &out);
                 execs += 1;
                 let secs = start.elapsed().as_secs();
-                if secs > 0 && execs % 10_000 == 0 {
-                    println!("execs/sec: {}", execs / secs);
+                if secs > 0 && ((iter == 1 && execs % 500 == 0) || (execs % 10_000 == 0)) {
+                    info!("execs/sec: {}", execs / secs);
                 }
             }
         } else {
@@ -383,7 +383,7 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
     #[cfg(feature = "radamsa")]
     let jobs = if args.debug {
         if args.jobs != 1 {
-            eprintln!("[WARN] Radamsa can only be used with one thread.");
+            warn!("Radamsa can only be used with one thread.");
         }
         1
     } else {
