@@ -7,10 +7,15 @@ use std::time::Instant;
 
 use anyhow::{Context, Result};
 use clap::Parser;
-use clap_verbosity_flag::{InfoLevel, Verbosity};
 use rand::Rng;
 use rand::RngCore;
 use regex::Regex;
+use tracing::Level;
+use tracing::debug;
+use tracing::error;
+use tracing::info;
+use tracing::trace;
+use tracing::warn;
 use tree_sitter::Language;
 use tree_sitter::Tree;
 use tree_splicer::splice::{Config, Splicer};
@@ -101,8 +106,13 @@ pub struct Args {
     #[arg(long, default_value_t = 500)]
     pub timeout: u64,
 
-    #[clap(flatten)]
-    verbose: Verbosity<InfoLevel>,
+    /// Increase verbosity
+    #[arg(
+        long,
+        short = 'v',
+        action = clap::ArgAction::Count,
+    )]
+    pub(crate) verbose: u8,
 
     /// Input files
     #[arg(value_name = "DIR", required = true)]
@@ -137,7 +147,7 @@ fn make_check(
     uninteresting_stderr: Option<String>,
 ) -> Result<CmdCheck> {
     if check.is_empty() {
-        eprintln!("Internal error: empty interestingness check!");
+        error!("Internal error: empty interestingness check!");
         std::process::exit(1);
     }
     let mut argv: Vec<_> = check.iter().collect();
@@ -183,10 +193,11 @@ fn check(
     chk: &CmdCheck,
     inp: &[u8],
 ) -> i32 {
+    trace!("checking input {}", String::from_utf8_lossy(inp));
     let state = match chk.start(inp) {
         Ok(s) => s,
         Err(e) => {
-            eprintln!("Problem when running target: {e}");
+            error!("Problem when running target: {e}");
             return -1;
         }
     };
@@ -198,9 +209,9 @@ fn check(
             if s == 6 {
                 return code;
             }
-            eprintln!("signal {s}!");
+            info!("signal {s}!");
         } else {
-            eprintln!("interesting!");
+            info!("interesting!");
         }
         let mut rng = rand::rng();
         let i = rng.random_range(0..10192);
@@ -221,7 +232,7 @@ fn check(
             },
             Some(8),
         ) {
-            Err(e) => eprintln!("Failed to reduce! {e}"),
+            Err(e) => warn!("Failed to reduce! {e}"),
             Ok((reduced, _)) => {
                 fs::write(format!("tree-crasher-{i}.reduced.out"), reduced.text).unwrap();
             }
@@ -242,7 +253,7 @@ fn job(
     chk: CmdCheck,
 ) {
     if files.is_empty() {
-        eprintln!("No files provided.");
+        error!("No files provided.");
         return;
     }
     #[cfg(feature = "radamsa")]
@@ -275,7 +286,7 @@ fn job(
     let mut rng = <rand::rngs::StdRng as rand::SeedableRng>::seed_from_u64(
         args.seed + u64::try_from(thread_idx).unwrap(),
     );
-    loop {
+    for iter in 0..usize::MAX {
         let config = Config {
             chaos: args.chaos,
             deletions: args.deletions,
@@ -291,6 +302,7 @@ fn job(
         let mut execs = 0;
         if let Some(splicer) = Splicer::new(config, files) {
             for (i, out) in splicer.enumerate() {
+                debug!("thread {thread_idx} iteration {iter} test case {i}");
                 if i == BATCH {
                     break;
                 }
@@ -302,8 +314,33 @@ fn job(
                 }
             }
         } else {
-            println!("error: no splices!"); // TODO: improve message
+            error!("error: no splices!"); // TODO: improve message
         }
+    }
+}
+
+fn verbosity_to_log_level(verbosity: u8) -> Level {
+    match verbosity {
+        0 => Level::WARN,
+        1 => Level::INFO,
+        2 => Level::DEBUG,
+        _ => Level::TRACE,
+    }
+}
+
+#[inline]
+fn init_tracing(cli: &Args) {
+    use tracing_subscriber::fmt::format::FmtSpan;
+    let verbose = verbosity_to_log_level(cli.verbose);
+    let builder = tracing_subscriber::fmt::fmt()
+        .with_span_events(FmtSpan::ENTER | FmtSpan::CLOSE)
+        .with_target(false)
+        .with_max_level(verbose);
+    if let Level::INFO | Level::WARN | Level::ERROR = verbose {
+        let builder = builder.without_time();
+        builder.init();
+    } else {
+        builder.init();
     }
 }
 
@@ -312,10 +349,9 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
     let args = Args::parse();
     debug_assert!(args.interesting_stdout.is_some() || args.uninteresting_stdout.is_none());
     debug_assert!(args.interesting_stderr.is_some() || args.uninteresting_stderr.is_none());
+    init_tracing(&args);
 
-    if args.debug {
-        eprintln!("Loading testcases...");
-    }
+    debug!("Loading testcases...");
     let mut files = HashMap::new();
     // TODO error messages
     for entry in fs::read_dir(&args.files)
@@ -341,9 +377,7 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
     let node_types1 = treereduce::NodeTypes::new(node_types_json_str).unwrap();
     let node_types2 = tree_splicer::node_types::NodeTypes::new(node_types_json_str).unwrap();
 
-    if args.debug {
-        eprintln!("Spawning threads...");
-    }
+    debug!("Spawning threads...");
     #[cfg(not(feature = "radamsa"))]
     let jobs = if args.debug { 1 } else { args.jobs };
     #[cfg(feature = "radamsa")]
