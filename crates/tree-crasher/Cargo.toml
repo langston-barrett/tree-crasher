@@ -16,16 +16,17 @@ workspace = true
 
 [dependencies]
 anyhow = { version = "1", optional = false }
-clap-verbosity-flag = { version = "3", optional = false }
 clap = { version = "4", features = ["derive"], optional = false }
 nu-ansi-term = { version = "0.50", optional = false }
 num_cpus = { version = "1", optional = false }
+radamsa-sys = { version = "0.1", optional = true }
 rand = "0.9.2"
 regex = "1"
+tracing = "0.1.43"
+tracing-subscriber = "0.3.22"
 treereduce = "0.4.0"
 tree-sitter = "0.25.10"
 tree-splicer = "0.7.0"
-radamsa-sys = { version = "0.1", optional = true }
 
 [features]
 default = []
