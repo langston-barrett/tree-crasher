@@ -9,6 +9,7 @@ use anyhow::{Context, Result};
 use clap::Parser;
 use clap_verbosity_flag::{InfoLevel, Verbosity};
 use rand::Rng;
+use rand::RngCore;
 use regex::Regex;
 use tree_sitter::Language;
 use tree_sitter::Tree;
@@ -231,6 +232,7 @@ fn check(
 
 // TODO: print executions/sec
 fn job(
+    thread_idx: usize,
     language: Language,
     // HACK: there should be another crate that deals with this...
     node_types1: &treereduce::NodeTypes,
@@ -270,6 +272,9 @@ fn job(
             check(&language, node_types1, &chk, &mutant);
         }
     }
+    let mut rng = <rand::rngs::StdRng as rand::SeedableRng>::seed_from_u64(
+        args.seed + u64::try_from(thread_idx).unwrap(),
+    );
     loop {
         let config = Config {
             chaos: args.chaos,
@@ -280,7 +285,7 @@ fn job(
             node_types: node_types2.clone(),
             max_size: args.max_size,
             reparse: usize::MAX,
-            seed: args.seed,
+            seed: rng.next_u64(),
         };
         let start = Instant::now();
         let mut execs = 0;
@@ -351,7 +356,7 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
         args.jobs
     };
     std::thread::scope(|s| {
-        for _ in 0..jobs {
+        for i in 0..jobs {
             let language = language.clone();
             let chk = chk.clone();
             let node_types1 = &node_types1;
@@ -359,7 +364,7 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
             let args = &args;
             let files = &files;
             s.spawn(move || {
-                job(language, node_types1, node_types2, args, files, chk);
+                job(i, language, node_types1, node_types2, args, files, chk);
             });
         }
     });
