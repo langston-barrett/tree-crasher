@@ -303,13 +303,18 @@ fn job(
         if let Some(splicer) = Splicer::new(config, files) {
             for (i, out) in splicer.enumerate() {
                 debug!("thread {thread_idx} iteration {iter} test case {i}");
+                let secs = start.elapsed().as_secs();
                 if i == BATCH {
+                    if secs > 0 {
+                        info!("execs/sec: {}", execs / secs);
+                    } else {
+                        info!("execs/sec: >{BATCH}");
+                    }
                     break;
                 }
                 let _code = check(&language, node_types1, &chk, &out);
                 execs += 1;
-                let secs = start.elapsed().as_secs();
-                if secs > 0 && ((iter == 1 && execs % 500 == 0) || (execs % 10_000 == 0)) {
+                if secs > 0 && secs % 15 == 0 {
                     info!("execs/sec: {}", execs / secs);
                 }
             }
