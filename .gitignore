@@ -1,5 +1,8 @@
 /target
 tmp/
 
+/corpus*/
+/out/
+
 /.out/
 *.ninja

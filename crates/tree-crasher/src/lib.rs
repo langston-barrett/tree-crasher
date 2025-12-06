@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::fs;
 use std::os::unix::process::ExitStatusExt;
+use std::path::Path;
 use std::path::PathBuf;
 use std::time::Duration;
 use std::time::Instant;
@@ -190,6 +191,7 @@ const BATCH: usize = 100_000; // not all materialized at once
 fn check(
     language: &Language,
     node_types: &treereduce::NodeTypes,
+    output: &Path,
     chk: &CmdCheck,
     inp: &[u8],
 ) -> i32 {
@@ -215,9 +217,9 @@ fn check(
         }
         let mut rng = rand::rng();
         let i = rng.random_range(0..10192);
-        fs::write(format!("tree-crasher-{i}.out"), inp).unwrap();
-        fs::write(format!("tree-crasher-{i}.stdout"), stdout).unwrap();
-        fs::write(format!("tree-crasher-{i}.stderr"), stderr).unwrap();
+        fs::write(output.join(format!("tree-crasher-{i}.out")), inp).unwrap();
+        fs::write(output.join(format!("tree-crasher-{i}.stdout")), stdout).unwrap();
+        fs::write(output.join(format!("tree-crasher-{i}.stderr")), stderr).unwrap();
         let tree = parse(language, &String::from_utf8_lossy(inp)).unwrap();
         match treereduce::treereduce_multi_pass(
             language.clone(),
@@ -280,7 +282,7 @@ fn job(
             };
             assert!(out_len <= MAX_SIZE);
             mutant.truncate(out_len);
-            check(&language, node_types1, &chk, &mutant);
+            check(&language, node_types1, &args.output, &chk, &mutant);
         }
     }
     let mut rng = <rand::rngs::StdRng as rand::SeedableRng>::seed_from_u64(
@@ -306,7 +308,7 @@ fn job(
                 if i == BATCH {
                     break;
                 }
-                let _code = check(&language, node_types1, &chk, &out);
+                let _code = check(&language, node_types1, &args.output, &chk, &out);
                 execs += 1;
                 let secs = start.elapsed().as_secs();
                 if secs > 0 && ((iter == 1 && execs % 500 == 0) || (execs % 10_000 == 0)) {
