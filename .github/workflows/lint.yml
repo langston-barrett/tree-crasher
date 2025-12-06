@@ -18,8 +18,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v0.6.0
+    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       with:
         persist-credentials: false
-    - uses: langston-barrett/gha/.github/actions/install-linters@c1a0d0bf070930011fa45e31623ccea963f2bc7a
-    - run: ./scripts/lint/lint.py --skip=clippy --skip=zizmor
+    - uses: langston-barrett/gha/.github/actions/install-linters@348fdc15bbc786f5cbffab25dd100df846607721
+    - run: ./scripts/lint/lint.py --skip=clippy
