@@ -1,4 +1,4 @@
-name: release
+name: rust release
 on:
   push:
     branches:
