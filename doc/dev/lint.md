@@ -1,32 +1,26 @@
 # Linting and formatting
 
 We employ a variety of linting and formatting tools. They can be run manually or
-with [Ninja].
+with [Lūn].
 
-[Ninja]: https://ninja-build.org/
+[Lūn]: https://langston-barrett.github.io/lun/
 
-## Ninja script
+## Lūn
 
-To run all the linters:
-
-```sh
-./scripts/lint/lint.py
-```
-
-To run all the formatters:
+To run all the linters and formatters:
 
 ```sh
-./scripts/lint/lint.py --format
+lun run
 ```
 
 As a [pre-commit hook]:
 
 [pre-commit hook]: https://git-scm.com/docs/githooks#_pre_commit
 
-```
+```sh
 cat <<'EOF' > .git/hooks/pre-commit
 #!/usr/bin/env bash
-./scripts/lint/lint.py
+lun run --check --staged
 EOF
 chmod +x .git/hooks/pre-commit
 ```
@@ -67,16 +61,6 @@ We run [mdlynx] on our Markdown files to check for broken links.
 git ls-files -z --exclude-standard '*.md' | xargs -0 mdlynx
 ```
 
-## Mypy
-
-We lint Python code with [mypy] in `--strict` mode.
-
-[mypy]: https://www.mypy-lang.org/
-
-```sh
-git ls-files -z --exclude-standard '*.py' | xargs -0 mypy --strict
-```
-
 ## Ruff
 
 We lint and format Python code with [Ruff].
@@ -92,7 +76,7 @@ git ls-files -z --exclude-standard '*.py' | xargs -0 ruff check
 
 We format Rust code with [`rustfmt`].
 
-[rustfmt]: https://rust-lang.github.io/rustfmt
+[`rustfmt`]: https://rust-lang.github.io/rustfmt
 
 You can install rustfmt with [`rustup`] like so:
 
@@ -136,6 +120,16 @@ We lint text files with [ttlint].
 
 ```bash
 git ls-files -z --exclude-standard '**' | xargs -0 ttlint
+```
+
+## ty
+
+We lint Python code with [ty].
+
+[ty]: https://docs.astral.sh/ty/
+
+```sh
+git ls-files -z --exclude-standard '*.py' | xargs -0 ty
 ```
 
 ## typos

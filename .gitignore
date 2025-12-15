@@ -4,5 +4,4 @@ tmp/
 /corpus*/
 /out/
 
-/.out/
-*.ninja
+/.lun/
