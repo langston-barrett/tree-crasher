@@ -236,7 +236,11 @@ fn check(
         ) {
             Err(e) => warn!("Failed to reduce! {e}"),
             Ok((reduced, _)) => {
-                fs::write(format!("tree-crasher-{i}.reduced.out"), reduced.text).unwrap();
+                fs::write(
+                    output.join(format!("tree-crasher-{i}.reduced.out")),
+                    reduced.text,
+                )
+                .unwrap();
             }
         }
     }
