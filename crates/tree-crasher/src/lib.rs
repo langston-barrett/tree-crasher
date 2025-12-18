@@ -379,6 +379,9 @@ pub fn main(language: Language, node_types_json_str: &'static str) -> Result<()>
     let node_types1 = treereduce::NodeTypes::new(node_types_json_str).unwrap();
     let node_types2 = tree_splicer::node_types::NodeTypes::new(node_types_json_str).unwrap();
 
+    fs::create_dir_all(&args.output)
+        .with_context(|| format!("When creating output directory {}", args.output.display()))?;
+
     debug!("Spawning threads...");
     #[cfg(not(feature = "radamsa"))]
     let jobs = if args.debug { 1 } else { args.jobs };
