@@ -1025,9 +1025,9 @@ dependencies = [
 
 [[package]]
 name = "treereduce"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f90fcb395a967b3057c76b4df71550984585ca282acf9cf384615d5634ac911c"
+checksum = "a9d053feaad31890fb7e83d9bd0f4454d6f4b5c57467faaf1de3c6d5a4b27954"
 dependencies = [
  "log",
  "regex",
