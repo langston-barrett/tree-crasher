@@ -811,6 +811,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-crasher-openscad"
+version = "0.5.0"
+dependencies = [
+ "anyhow",
+ "tree-crasher",
+ "tree-sitter-openscad-ng",
+]
+
+[[package]]
 name = "tree-crasher-python"
 version = "0.5.0"
 dependencies = [
@@ -947,6 +956,16 @@ name = "tree-sitter-nix"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4952a9733f3a98f6683a0ccd1035d84ab7a52f7e84eeed58548d86765ad92de3"
+dependencies = [
+ "cc",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-openscad-ng"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82be52d535680be6d7b9971146495954fa4c9dab30ca72e7a3d9fb1ab17acbfc"
 dependencies = [
  "cc",
  "tree-sitter-language",
