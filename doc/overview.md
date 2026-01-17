@@ -47,6 +47,7 @@ Additionally, the following fuzzers can be built from source or installed via
 crates.io:
 
 - [HTML](../crates/tree-crasher-html)
+- [OpenSCAD](../crates/tree-crasher-openscad)
 - [Ruby](../crates/tree-crasher-ruby)
 
 Languages are very easy to add, so file an issue or a PR if you want a new one!

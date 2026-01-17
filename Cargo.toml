@@ -6,13 +6,14 @@ members = [
   "crates/tree-crasher-html",
   "crates/tree-crasher-javascript",
   "crates/tree-crasher-nix",
+  "crates/tree-crasher-openscad",
   "crates/tree-crasher-python",
   "crates/tree-crasher-regex",
   "crates/tree-crasher-ruby",
   "crates/tree-crasher-rust",
+  "crates/tree-crasher-solidity",
   "crates/tree-crasher-sql",
   "crates/tree-crasher-typescript",
-  "crates/tree-crasher-solidity",
 ]
 resolver = "2"
 
