@@ -23,7 +23,7 @@ radamsa-sys = { version = "0.1", optional = true }
 rand = "0.9.2"
 regex = "1"
 tracing = "0.1.44"
-tracing-subscriber = "0.3.22"
+tracing-subscriber = "0.3.23"
 treereduce = "0.4.1"
 tree-sitter = "0.25.10"
 tree-splicer = "0.7.0"
