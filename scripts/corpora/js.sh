@@ -20,7 +20,7 @@ repos=(
   "denoland/deno"
   "facebook/hermes"
 )
-mkdir -p js
+mkdir -p corpus-js
 for repo in "${repos[@]}"; do
   base=$(basename "${repo}")
   if ! [[ -d "${base}" ]]; then
@@ -28,6 +28,6 @@ for repo in "${repos[@]}"; do
   fi
   for f in $(find "${base}" -type f -name "*.js"); do
     echo "${f}"
-    cp "${f}" js/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
+    cp "${f}" corpus-js/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
   done
 done
