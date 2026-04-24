@@ -270,10 +270,8 @@ fn job(
         loop {
             const MAX_SIZE: usize = 4096;
             // TODO: Mutate in-place
-            let mut input: Vec<u8> = file_bytes
-                .get(rng.random_range(0..files.len()))
-                .unwrap()
-                .to_vec();
+            let mut input: Vec<u8> =
+                (*file_bytes.get(rng.random_range(0..files.len())).unwrap()).clone();
             let mut mutant = vec![0u8; MAX_SIZE];
             let out_len = unsafe {
                 radamsa_sys::radamsa(
