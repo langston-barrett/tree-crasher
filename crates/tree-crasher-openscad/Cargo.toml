@@ -17,4 +17,4 @@ workspace = true
 [dependencies]
 anyhow = "1"
 tree-crasher = { workspace = true }
-tree-sitter-openscad-ng = "0.6.1"
+tree-sitter-openscad-ng = "0.7.1"
