@@ -17,4 +17,4 @@ workspace = true
 [dependencies]
 anyhow = "1"
 tree-crasher = { workspace = true }
-tree-sitter-c = "0.24.1"
+tree-sitter-c = "0.24.2"
