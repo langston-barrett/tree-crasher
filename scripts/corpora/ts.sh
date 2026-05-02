@@ -12,7 +12,7 @@ repos=(
   "microsoft/vscode"
   "swc-project/swc"
 )
-mkdir -p ts
+mkdir -p corpus-ts
 for repo in "${repos[@]}"; do
   base=$(basename "${repo}")
   if ! [[ -d "${base}" ]]; then
@@ -20,6 +20,6 @@ for repo in "${repos[@]}"; do
   fi
   for f in $(find "${base}" -type f -name "*.ts"); do
     echo "${f}"
-    cp "${f}" ts/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
+    cp "${f}" corpus-ts/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
   done
 done
