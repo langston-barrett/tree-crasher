@@ -11,7 +11,7 @@ on:
 
 jobs:
   release:
-    uses: langston-barrett/gha/.github/workflows/rust-release.yml@9c2fa6aecfca059cb23255f6e4f84f8227801812
+    uses: langston-barrett/gha/.github/workflows/rust-release.yml@e48498bb55f3024a52a7686f698b2360c5c75e59
     with:
       publish: ${{ startsWith(github.ref, 'refs/tags/v') }}
     secrets:
