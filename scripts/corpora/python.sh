@@ -8,8 +8,12 @@ set -e
 repos=(
     "python/cpython"
     "mozillazg/pypy"
+    "python/mypy"
+    "astral-sh/ty"
+    "Instagram/MonkeyType"
+    "microsoft/pyright"
 )
-mkdir -p python
+mkdir -p corpus-python
 for repo in "${repos[@]}"; do
   base=$(basename "${repo}")
   if ! [[ -d "${base}" ]]; then
@@ -17,6 +21,6 @@ for repo in "${repos[@]}"; do
   fi
   for f in $(find "${base}" -type f -name "*.py"); do
     echo "${f}"
-    cp "${f}" python/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
+    cp "${f}" corpus-python/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
   done
 done
