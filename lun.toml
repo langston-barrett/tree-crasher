@@ -80,21 +80,12 @@ files = ["*.py"]
 # -------------------------------------
 # rust
 
-[[linter]]
+[[tool]]
 name = "cargo clippy"
-cmd = "cargo clippy --color=always --all-targets -- --deny warnings"
-files = ["*.rs"]
-granularity = "batch"
-configs = ["Cargo.toml"]
-fix = "cargo clippy --color=always --allow-dirty --fix"
 
-[[formatter]]
+[[tool]]
 name = "cargo fmt"
-cmd = "cargo fmt -- --color=always --"
-files = ["*.rs"]
-granularity = "batch"
-configs = ["Cargo.toml"]
-check = "cargo fmt --check"
+configs = []
 
 # -------------------------------------
 # sh
