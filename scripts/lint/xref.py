@@ -97,7 +97,7 @@ def go(paths: list[Path]) -> None:
                 collect(path, content, defs, refs)
             except UnicodeDecodeError:
                 pass
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 die(f"Error reading {path}: {e}")
 
     if not check(defs, refs):
