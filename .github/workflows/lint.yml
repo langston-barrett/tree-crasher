@@ -22,7 +22,7 @@ jobs:
       with:
         persist-credentials: false
     - uses: langston-barrett/gha/.github/actions/install-linters@d0cdf249a9684185d96083c87d078679cd373b28
-    - uses: langston-barrett/lun/.github/actions/lun@50ca01e7068ff2e5666baed983a18dc5fdeb8558
+    - uses: langston-barrett/lun/.github/actions/lun@e90599ca77fe42f903364e083631f91caf2cc572
       with:
         flags: "--color=always"
         run-flags: "--check --skip-tool='cargo clippy'"
