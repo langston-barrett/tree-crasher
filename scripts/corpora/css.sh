@@ -9,7 +9,7 @@ repos=(
   "twbs/bootstrap"
   "web-platform-tests/wpt"
 )
-mkdir -p css
+mkdir -p corpus-css
 for repo in "${repos[@]}"; do
   base=$(basename "${repo}")
   if ! [[ -d "${base}" ]]; then
@@ -17,6 +17,6 @@ for repo in "${repos[@]}"; do
   fi
   for f in $(find "${base}" -type f -name "*.css"); do
     echo "${f}"
-    cp "${f}" css/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
+    cp "${f}" corpus-css/"${base}-$(sha256sum "${f}" | head -c 5)-$(basename "${f}")"
   done
 done
